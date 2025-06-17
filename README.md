@@ -1,3 +1,28 @@
+# Hamal-frontend
+
+## Initial description of application
+this is a description of frontend of small callcenter application
+the goal of this application to create a crm-like system or google-forms like system for small callcenter. 
+More details of user's work flow in application.
+First page that has to be opened - login page. only 2 input field (username, password) and button 'login'
+User (Operator or Admin) can login.
+after login page - transfer to 'get-next-form' page. It has to contain only button 'get next form'. By click on this button - transer to page of 'form' and get the information about one of citizen, after changing info use "update" the form. Updated citizen should be marked as updated and never pop up for next callcenter operator, also should be status 'in progress' for citizen that already pop uped but not updated, they also should never pop up for another operator.
+also admin have options to create or delete user, upload or csv file with data about citizens, export current data to csv, delete all existing data about citizens in system.
+the features:
+Admin
+- Create / Update / Delete User (call center operator)
+- Get All users
+- upload csv file to update citizens database
+- export current data from database to csv file
+- clear the citizen table in database
+User
+- get next citizen data
+- update citizen data
+System 
+- login (jwt token based authentication and authorization)
+
+The application should use react-ts, axios, rtk-query, tailwind css
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
