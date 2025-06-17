@@ -1,7 +1,7 @@
 ---
 id: TASK-2025-009
 title: "Create 'Get Next Citizen' Page for Operator"
-status: backlog
+status: done
 priority: medium
 type: feature
 estimate: 3h
@@ -12,6 +12,7 @@ parents: [TASK-2025-007]
 arch_refs: [ARCH-frontend-app]
 audit_log:
   - {date: 2025-06-17, user: "@AI-DocArchitect", action: "created with status backlog"}
+  - {date: 2025-06-17, user: "@AI-Assistant", action: "completed - Get Next Citizen page with queue status handling"}
 ---
 
 ## Description

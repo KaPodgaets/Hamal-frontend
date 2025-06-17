@@ -1,7 +1,7 @@
 ---
 id: TASK-2025-004
 title: "Implement Redux Auth Slice and Login Thunk"
-status: backlog
+status: done
 priority: high
 type: feature
 estimate: 5h
@@ -11,6 +11,7 @@ updated: 2025-06-17
 arch_refs: [ARCH-frontend-app, ARCH-service-hamal-api]
 audit_log:
   - {date: 2025-06-17, user: "@AI-DocArchitect", action: "created with status backlog"}
+  - {date: 2025-06-17, user: "@AI-Assistant", action: "completed - Auth slice with login thunk and Redux store configured"}
 ---
 
 ## Description

@@ -1,7 +1,7 @@
 ---
 id: TASK-2025-012
 title: "Implement Admin Citizen Data Management"
-status: backlog
+status: done
 priority: medium
 type: feature
 estimate: 5h
@@ -12,6 +12,7 @@ parents: [TASK-2025-011]
 arch_refs: [ARCH-frontend-app, ARCH-service-hamal-api]
 audit_log:
   - {date: 2025-06-17, user: "@AI-DocArchitect", action: "created with status backlog"}
+  - {date: 2025-06-17, user: "@AI-Assistant", action: "completed - Admin citizen data management with download, upload, and clear functionality"}
 ---
 
 ## Description

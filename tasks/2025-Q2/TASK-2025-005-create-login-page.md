@@ -1,7 +1,7 @@
 ---
 id: TASK-2025-005
 title: "Create Login Page"
-status: backlog
+status: done
 priority: high
 type: feature
 estimate: 4h
@@ -12,6 +12,7 @@ arch_refs: [ARCH-frontend-app]
 parents: [TASK-2025-004]
 audit_log:
   - {date: 2025-06-17, user: "@AI-DocArchitect", action: "created with status backlog"}
+  - {date: 2025-06-17, user: "@AI-Assistant", action: "completed - Login page with form and Redux integration"}
 ---
 
 ## Description

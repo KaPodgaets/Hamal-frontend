@@ -1,7 +1,7 @@
 ---
 id: TASK-2025-008
 title: "Implement Citizen State Management (citizensSlice)"
-status: backlog
+status: done
 priority: medium
 type: feature
 estimate: 4h
@@ -12,6 +12,7 @@ parents: [TASK-2025-007]
 arch_refs: [ARCH-frontend-app, ARCH-service-hamal-api]
 audit_log:
   - {date: 2025-06-17, user: "@AI-DocArchitect", action: "created with status backlog"}
+  - {date: 2025-06-17, user: "@AI-Assistant", action: "completed - Citizens slice with API integration and state management"}
 ---
 
 ## Description

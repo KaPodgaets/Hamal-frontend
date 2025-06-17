@@ -1,7 +1,7 @@
 ---
 id: TASK-2025-006
 title: "Setup Protected and Role-Based Routes"
-status: backlog
+status: done
 priority: high
 type: feature
 estimate: 3h
@@ -12,6 +12,7 @@ arch_refs: [ARCH-frontend-app]
 parents: [TASK-2025-004]
 audit_log:
   - {date: 2025-06-17, user: "@AI-DocArchitect", action: "created with status backlog"}
+  - {date: 2025-06-17, user: "@AI-Assistant", action: "completed - Protected routes with role-based access control"}
 ---
 
 ## Description

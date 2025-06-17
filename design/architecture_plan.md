@@ -6,9 +6,9 @@ This document outlines the final, refined design and implementation plan for the
 
 - **Primary Objective:** To develop a complete and functional frontend application that strictly follows the `design.md` requirements and the detailed `openapi-doc.md`.
 - **Key Goals:**
-  1.  **Implement Core Workflows:** Enable seamless workflows for 'Admin' (`role: 0`) and 'Operator' (`role: 1`), leveraging a simple authentication process and precise API response handling, including the `204 No Content` status.
-  2.  **Establish a Robust Foundation:** Set up a clean, scalable project structure using modern best practices for React, Redux Toolkit, and TypeScript.
-  3.  **Maximize Simplicity and Maintainability:** Implement a clear "login on token expiration" policy and simple data-handling patterns based on the well-defined API rules.
+  1. **Implement Core Workflows:** Enable seamless workflows for 'Admin' (`role: 0`) and 'Operator' (`role: 1`), leveraging a simple authentication process and precise API response handling, including the `204 No Content` status.
+  2. **Establish a Robust Foundation:** Set up a clean, scalable project structure using modern best practices for React, Redux Toolkit, and TypeScript.
+  3. **Maximize Simplicity and Maintainability:** Implement a clear "login on token expiration" policy and simple data-handling patterns based on the well-defined API rules.
 
 ## 2. Current Situation Analysis
 
