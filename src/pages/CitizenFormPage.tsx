@@ -2,7 +2,11 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { updateCitizenThunk, clearError } from "../store/slices/citizensSlice";
+import {
+  updateCitizenThunk,
+  clearError,
+  clearCurrentCitizen,
+} from "../store/slices/citizensSlice";
 import type { AppDispatch, RootState } from "../store/store";
 
 interface CitizenFormData {
@@ -34,8 +38,10 @@ const CitizenFormPage = () => {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
-  } = useForm<CitizenFormData>();
+    formState: { errors, isValid },
+  } = useForm<CitizenFormData>({
+    mode: "onChange", // Enable real-time validation
+  });
 
   // Populate form when citizen data is available
   useEffect(() => {
@@ -52,21 +58,84 @@ const CitizenFormPage = () => {
   }, [currentCitizen, navigate]);
 
   const onSubmit = async (data: CitizenFormData) => {
-    if (!currentCitizen) return;
+    console.log("Form submitted with data:", data);
+    console.log("Form errors:", errors);
+    console.log("Form is valid:", isValid);
+
+    if (!currentCitizen) {
+      console.error("No current citizen available");
+      return;
+    }
+
+    console.log("Submitting form data:", data);
+    console.log("Citizen ID:", currentCitizen.id);
 
     dispatch(clearError());
-    const result = await dispatch(
-      updateCitizenThunk({ id: currentCitizen.id, data })
-    );
 
-    if (updateCitizenThunk.fulfilled.match(result)) {
-      // Redirect back to get next citizen page
-      navigate("/operator");
+    // Ensure all required fields are present and properly formatted
+    const formattedData: CitizenFormData = {
+      streetName: data.streetName || "",
+      buildingNumber: data.buildingNumber || "",
+      flatNumber: data.flatNumber || "",
+      firstName: data.firstName || "",
+      lastName: data.lastName || "",
+      familyNumber: data.familyNumber || 1,
+      isLonely: data.isLonely || false,
+      isAddressWrong: data.isAddressWrong || false,
+      newStreetName: data.newStreetName || null,
+      newBuildingNumber: data.newBuildingNumber || null,
+      newFlatNumber: data.newFlatNumber || null,
+      phone1: data.phone1 || null,
+      phone2: data.phone2 || null,
+      phone3: data.phone3 || null,
+      isAnsweredTheCall: data.isAnsweredTheCall || false,
+    };
+
+    console.log("Formatted data for API:", formattedData);
+
+    try {
+      const result = await dispatch(
+        updateCitizenThunk({ id: currentCitizen.id, data: formattedData })
+      );
+
+      console.log("Update result:", result);
+
+      if (updateCitizenThunk.fulfilled.match(result)) {
+        console.log("Update successful, redirecting to /operator");
+        // Clear the current citizen to force a fresh fetch
+        dispatch(clearCurrentCitizen());
+        // Redirect back to get next citizen page
+        navigate("/operator");
+      } else if (updateCitizenThunk.rejected.match(result)) {
+        console.error("Update failed:", result.payload);
+      }
+    } catch (error) {
+      console.error("Error during form submission:", error);
     }
   };
 
   const handleCancel = () => {
-    navigate("/operator");
+    // Simple alert to confirm button click
+    alert("Cancel button clicked! Attempting navigation...");
+
+    try {
+      navigate("/operator", { replace: true });
+      console.log("React Router navigation called successfully");
+    } catch (error) {
+      console.error("React Router navigation failed:", error);
+      console.log("Falling back to window.location...");
+      // Fallback to window.location
+      window.location.href = "/operator";
+    }
+
+    // Additional test - try immediate navigation
+    setTimeout(() => {
+      console.log("Testing navigation after 1 second...");
+      if (window.location.pathname !== "/operator") {
+        console.log("Navigation didn't work, forcing with window.location");
+        window.location.href = "/operator";
+      }
+    }, 1000);
   };
 
   if (!currentCitizen) {
@@ -90,6 +159,7 @@ const CitizenFormPage = () => {
             </h1>
             <div className="flex gap-4">
               <button
+                type="button"
                 onClick={handleCancel}
                 className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
               >
@@ -354,20 +424,48 @@ const CitizenFormPage = () => {
             <div className="flex justify-end gap-4 pt-6 border-t">
               <button
                 type="button"
-                onClick={handleCancel}
-                className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+                onClick={() => {
+                  console.log("Test navigation clicked");
+                  navigate("/operator", { replace: true });
+                }}
+                className="px-4 py-2 border border-green-300 rounded-md text-sm font-medium text-green-700 hover:bg-green-50"
               >
-                Cancel
+                Test Nav
               </button>
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || !isValid}
                 className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? "Saving..." : "Save Changes"}
               </button>
             </div>
           </form>
+
+          {/* Cancel button outside form to prevent form interference */}
+          <div className="mt-6 flex justify-end gap-4">
+            <button
+              type="button"
+              onClick={() => {
+                alert("Direct navigation test");
+                window.location.href = "/operator";
+              }}
+              className="px-4 py-2 border border-red-300 rounded-md text-sm font-medium text-red-700 hover:bg-red-50"
+            >
+              Direct Nav Test
+            </button>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleCancel();
+              }}
+              className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              Cancel
+            </button>
+          </div>
         </div>
       </div>
     </div>
