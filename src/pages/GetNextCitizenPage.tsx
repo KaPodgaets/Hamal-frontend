@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getNextCitizenThunk, clearError } from "../store/slices/citizensSlice";
+import { logout } from "../store/slices/authSlice";
 import type { AppDispatch, RootState } from "../store/store";
 
 const GetNextCitizenPage = () => {
@@ -28,6 +29,11 @@ const GetNextCitizenPage = () => {
       }
       // If result.payload is null, queueIsEmpty will be set to true
     }
+  };
+
+  const handleSignOut = () => {
+    dispatch(logout());
+    navigate("/login");
   };
 
   return (
@@ -91,7 +97,7 @@ const GetNextCitizenPage = () => {
 
         <div className="text-center">
           <button
-            onClick={() => navigate("/login")}
+            onClick={handleSignOut}
             className="text-blue-600 hover:text-blue-500 text-sm"
           >
             Sign out

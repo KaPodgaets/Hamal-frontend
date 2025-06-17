@@ -2,56 +2,42 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import api from "../../services/api";
 
-// Types based on OpenAPI documentation
+// Types based on new authoritative OpenAPI documentation
 interface CitizenResponse {
   id: number;
+  streetName: string;
+  buildingNumber: string;
+  flatNumber: string;
   firstName: string;
   lastName: string;
-  phoneNumber: string;
-  address: string;
-  city: string;
-  state: string;
-  zipCode: string;
-  email: string;
-  dateOfBirth: string;
-  ssn: string;
-  emergencyContact: string;
-  emergencyPhone: string;
-  medicalConditions: string;
-  medications: string;
-  allergies: string;
-  insuranceProvider: string;
-  insurancePolicyNumber: string;
-  insuranceGroupNumber: string;
-  primaryCarePhysician: string;
-  primaryCarePhone: string;
-  hospitalPreference: string;
-  notes: string;
+  familyNumber: number;
+  isLonely: boolean;
+  isAddressWrong: boolean;
+  newStreetName: string | null;
+  newBuildingNumber: string | null;
+  newFlatNumber: string | null;
+  phone1: string | null;
+  phone2: string | null;
+  phone3: string | null;
+  isAnsweredTheCall: boolean;
 }
 
 interface UpdateCitizenRequest {
-  firstName?: string;
-  lastName?: string;
-  phoneNumber?: string;
-  address?: string;
-  city?: string;
-  state?: string;
-  zipCode?: string;
-  email?: string;
-  dateOfBirth?: string;
-  ssn?: string;
-  emergencyContact?: string;
-  emergencyPhone?: string;
-  medicalConditions?: string;
-  medications?: string;
-  allergies?: string;
-  insuranceProvider?: string;
-  insurancePolicyNumber?: string;
-  insuranceGroupNumber?: string;
-  primaryCarePhysician?: string;
-  primaryCarePhone?: string;
-  hospitalPreference?: string;
-  notes?: string;
+  streetName: string;
+  buildingNumber: string;
+  flatNumber: string;
+  firstName: string;
+  lastName: string;
+  familyNumber: number;
+  isLonely: boolean;
+  isAddressWrong: boolean;
+  newStreetName: string | null;
+  newBuildingNumber: string | null;
+  newFlatNumber: string | null;
+  phone1: string | null;
+  phone2: string | null;
+  phone3: string | null;
+  isAnsweredTheCall: boolean;
 }
 
 interface CitizensState {

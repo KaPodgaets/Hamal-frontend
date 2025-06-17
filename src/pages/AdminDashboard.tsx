@@ -1,7 +1,16 @@
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logout } from "../store/slices/authSlice";
+import type { AppDispatch } from "../store/store";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleSignOut = () => {
+    dispatch(logout());
+    navigate("/login");
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
@@ -12,7 +21,7 @@ const AdminDashboard = () => {
               Admin Dashboard
             </h1>
             <button
-              onClick={() => navigate("/login")}
+              onClick={handleSignOut}
               className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
             >
               Sign out

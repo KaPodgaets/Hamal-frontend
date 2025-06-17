@@ -6,28 +6,21 @@ import { updateCitizenThunk, clearError } from "../store/slices/citizensSlice";
 import type { AppDispatch, RootState } from "../store/store";
 
 interface CitizenFormData {
+  streetName: string;
+  buildingNumber: string;
+  flatNumber: string;
   firstName: string;
   lastName: string;
-  phoneNumber: string;
-  address: string;
-  city: string;
-  state: string;
-  zipCode: string;
-  email: string;
-  dateOfBirth: string;
-  ssn: string;
-  emergencyContact: string;
-  emergencyPhone: string;
-  medicalConditions: string;
-  medications: string;
-  allergies: string;
-  insuranceProvider: string;
-  insurancePolicyNumber: string;
-  insuranceGroupNumber: string;
-  primaryCarePhysician: string;
-  primaryCarePhone: string;
-  hospitalPreference: string;
-  notes: string;
+  familyNumber: number;
+  isLonely: boolean;
+  isAddressWrong: boolean;
+  newStreetName: string | null;
+  newBuildingNumber: string | null;
+  newFlatNumber: string | null;
+  phone1: string | null;
+  phone2: string | null;
+  phone3: string | null;
+  isAnsweredTheCall: boolean;
 }
 
 const CitizenFormPage = () => {
@@ -107,291 +100,248 @@ const CitizenFormPage = () => {
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* Personal Information */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  First Name
-                </label>
-                <input
-                  {...register("firstName", {
-                    required: "First name is required",
-                  })}
-                  className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                />
-                {errors.firstName && (
-                  <p className="mt-1 text-sm text-red-600">
-                    {errors.firstName.message}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Last Name
-                </label>
-                <input
-                  {...register("lastName", {
-                    required: "Last name is required",
-                  })}
-                  className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                />
-                {errors.lastName && (
-                  <p className="mt-1 text-sm text-red-600">
-                    {errors.lastName.message}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Phone Number
-                </label>
-                <input
-                  {...register("phoneNumber")}
-                  className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Email
-                </label>
-                <input
-                  {...register("email")}
-                  type="email"
-                  className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Date of Birth
-                </label>
-                <input
-                  {...register("dateOfBirth")}
-                  type="date"
-                  className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  SSN
-                </label>
-                <input
-                  {...register("ssn")}
-                  className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-            </div>
-
-            {/* Address Information */}
             <div className="border-t pt-6">
               <h3 className="text-lg font-medium text-gray-900 mb-4">
-                Address Information
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Address
-                  </label>
-                  <input
-                    {...register("address")}
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    City
-                  </label>
-                  <input
-                    {...register("city")}
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    State
-                  </label>
-                  <input
-                    {...register("state")}
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    ZIP Code
-                  </label>
-                  <input
-                    {...register("zipCode")}
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Emergency Contact */}
-            <div className="border-t pt-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">
-                Emergency Contact
+                Personal Information
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
-                    Emergency Contact Name
+                    First Name *
                   </label>
                   <input
-                    {...register("emergencyContact")}
+                    {...register("firstName", {
+                      required: "First name is required",
+                    })}
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  />
+                  {errors.firstName && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.firstName.message}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Last Name *
+                  </label>
+                  <input
+                    {...register("lastName", {
+                      required: "Last name is required",
+                    })}
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  />
+                  {errors.lastName && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.lastName.message}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Family Number *
+                  </label>
+                  <input
+                    {...register("familyNumber", {
+                      required: "Family number is required",
+                      valueAsNumber: true,
+                      min: {
+                        value: 1,
+                        message: "Family number must be at least 1",
+                      },
+                    })}
+                    type="number"
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  />
+                  {errors.familyNumber && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.familyNumber.message}
+                    </p>
+                  )}
+                </div>
+
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center">
+                    <input
+                      {...register("isLonely")}
+                      type="checkbox"
+                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    />
+                    <label className="ml-2 block text-sm text-gray-700">
+                      Is Lonely
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Current Address */}
+            <div className="border-t pt-6">
+              <h3 className="text-lg font-medium text-gray-900 mb-4">
+                Current Address
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Street Name *
+                  </label>
+                  <input
+                    {...register("streetName", {
+                      required: "Street name is required",
+                    })}
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  />
+                  {errors.streetName && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.streetName.message}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Building Number *
+                  </label>
+                  <input
+                    {...register("buildingNumber", {
+                      required: "Building number is required",
+                    })}
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  />
+                  {errors.buildingNumber && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.buildingNumber.message}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Flat Number *
+                  </label>
+                  <input
+                    {...register("flatNumber", {
+                      required: "Flat number is required",
+                    })}
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  />
+                  {errors.flatNumber && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.flatNumber.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="mt-4">
+                <div className="flex items-center">
+                  <input
+                    {...register("isAddressWrong")}
+                    type="checkbox"
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  />
+                  <label className="ml-2 block text-sm text-gray-700">
+                    Address is Wrong
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            {/* New Address (if address is wrong) */}
+            <div className="border-t pt-6">
+              <h3 className="text-lg font-medium text-gray-900 mb-4">
+                New Address (if current address is wrong)
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    New Street Name
+                  </label>
+                  <input
+                    {...register("newStreetName")}
                     className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
-                    Emergency Contact Phone
+                    New Building Number
                   </label>
                   <input
-                    {...register("emergencyPhone")}
+                    {...register("newBuildingNumber")}
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    New Flat Number
+                  </label>
+                  <input
+                    {...register("newFlatNumber")}
                     className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
               </div>
             </div>
 
-            {/* Medical Information */}
+            {/* Phone Numbers */}
             <div className="border-t pt-6">
               <h3 className="text-lg font-medium text-gray-900 mb-4">
-                Medical Information
+                Phone Numbers
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
-                    Medical Conditions
+                    Phone 1
                   </label>
-                  <textarea
-                    {...register("medicalConditions")}
-                    rows={3}
+                  <input
+                    {...register("phone1")}
+                    type="tel"
                     className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
-                    Medications
+                    Phone 2
                   </label>
-                  <textarea
-                    {...register("medications")}
-                    rows={3}
+                  <input
+                    {...register("phone2")}
+                    type="tel"
                     className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
-                    Allergies
+                    Phone 3
                   </label>
-                  <textarea
-                    {...register("allergies")}
-                    rows={3}
+                  <input
+                    {...register("phone3")}
+                    type="tel"
                     className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
               </div>
             </div>
 
-            {/* Insurance Information */}
+            {/* Call Status */}
             <div className="border-t pt-6">
               <h3 className="text-lg font-medium text-gray-900 mb-4">
-                Insurance Information
+                Call Status
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Insurance Provider
-                  </label>
-                  <input
-                    {...register("insuranceProvider")}
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Policy Number
-                  </label>
-                  <input
-                    {...register("insurancePolicyNumber")}
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Group Number
-                  </label>
-                  <input
-                    {...register("insuranceGroupNumber")}
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Healthcare Provider */}
-            <div className="border-t pt-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">
-                Healthcare Provider
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Primary Care Physician
-                  </label>
-                  <input
-                    {...register("primaryCarePhysician")}
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Primary Care Phone
-                  </label>
-                  <input
-                    {...register("primaryCarePhone")}
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Hospital Preference
-                  </label>
-                  <input
-                    {...register("hospitalPreference")}
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Notes */}
-            <div className="border-t pt-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">
-                Additional Notes
-              </h3>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Notes
-                </label>
-                <textarea
-                  {...register("notes")}
-                  rows={4}
-                  className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              <div className="flex items-center">
+                <input
+                  {...register("isAnsweredTheCall")}
+                  type="checkbox"
+                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                 />
+                <label className="ml-2 block text-sm text-gray-700">
+                  Citizen Answered The Call
+                </label>
               </div>
             </div>
 
