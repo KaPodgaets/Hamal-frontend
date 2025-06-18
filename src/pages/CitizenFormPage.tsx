@@ -213,7 +213,7 @@ const CitizenFormPage = () => {
             }}
           >
             <Typography variant="h4" component="h1" sx={{ fontWeight: 600 }}>
-              Citizen Information
+              פרטים
             </Typography>
             <Button
               variant="outlined"
@@ -221,7 +221,7 @@ const CitizenFormPage = () => {
               onClick={handleCancel}
               sx={{ minWidth: 120 }}
             >
-              Cancel
+              ביטול
             </Button>
           </Box>
 
@@ -231,7 +231,7 @@ const CitizenFormPage = () => {
               <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
                 <Phone sx={{ mr: 1, color: "primary.main" }} />
                 <Typography variant="h6" component="h2">
-                  Phone Numbers
+                  מספרי טלפון
                 </Typography>
               </Box>
 
@@ -240,7 +240,7 @@ const CitizenFormPage = () => {
                   <TextField
                     {...register("phone1")}
                     fullWidth
-                    label="Phone 1"
+                    label="מספר 1"
                     type="tel"
                     InputProps={{
                       readOnly: true,
@@ -257,7 +257,7 @@ const CitizenFormPage = () => {
                   <TextField
                     {...register("phone2")}
                     fullWidth
-                    label="Phone 2"
+                    label="מספר 2"
                     type="tel"
                     InputProps={{
                       readOnly: true,
@@ -274,7 +274,7 @@ const CitizenFormPage = () => {
                   <TextField
                     {...register("phone3")}
                     fullWidth
-                    label="Phone 3"
+                    label="מספר 3"
                     type="tel"
                     InputProps={{
                       readOnly: true,
@@ -294,7 +294,7 @@ const CitizenFormPage = () => {
               <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
                 <Person sx={{ mr: 1, color: "primary.main" }} />
                 <Typography variant="h6" component="h2">
-                  Personal Information
+                  פרטים אישיים
                 </Typography>
               </Box>
 
@@ -305,7 +305,7 @@ const CitizenFormPage = () => {
                       required: "First name is required",
                     })}
                     fullWidth
-                    label="First Name"
+                    label="שם פרטי"
                     required
                     error={!!errors.firstName}
                     helperText={errors.firstName?.message}
@@ -326,7 +326,7 @@ const CitizenFormPage = () => {
                       required: "Last name is required",
                     })}
                     fullWidth
-                    label="Last Name"
+                    label="שם משפחה"
                     required
                     error={!!errors.lastName}
                     helperText={errors.lastName?.message}
@@ -352,7 +352,7 @@ const CitizenFormPage = () => {
                       },
                     })}
                     fullWidth
-                    label="Family Number"
+                    label="מספר מערכת"
                     type="number"
                     required
                     error={!!errors.familyNumber}
@@ -383,7 +383,7 @@ const CitizenFormPage = () => {
                         color="primary"
                       />
                     }
-                    label="Citizen Answered The Call"
+                    label="האם התושב ענה"
                   />
                 </Box>
 
@@ -399,7 +399,7 @@ const CitizenFormPage = () => {
                     control={
                       <Checkbox {...register("isLonely")} color="primary" />
                     }
-                    label="Is Lonely"
+                    label="האם תושב ללא עורף משפחתי"
                   />
                 </Box>
 
@@ -415,7 +415,7 @@ const CitizenFormPage = () => {
                     control={
                       <Checkbox {...register("hasMamad")} color="primary" />
                     }
-                    label="Has Mamad"
+                    label="האם יש ממד"
                   />
                 </Box>
 
@@ -434,7 +434,7 @@ const CitizenFormPage = () => {
                         color="primary"
                       />
                     }
-                    label="Has Miklat Prati"
+                    label="האם יש מקלט בבניין"
                   />
                 </Box>
 
@@ -453,7 +453,7 @@ const CitizenFormPage = () => {
                         color="primary"
                       />
                     }
-                    label="Has Miklat Ziburi"
+                    label="האם יש מקלט ציבורי"
                   />
                 </Box>
 
@@ -472,7 +472,7 @@ const CitizenFormPage = () => {
                         color="primary"
                       />
                     }
-                    label="Has Mobility Restriction"
+                    label="האם יש מגבלת ניידות"
                   />
                 </Box>
               </Box>
@@ -483,7 +483,7 @@ const CitizenFormPage = () => {
               <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
                 <Home sx={{ mr: 1, color: "primary.main" }} />
                 <Typography variant="h6" component="h2">
-                  Current Address
+                  כתובת
                 </Typography>
               </Box>
 
@@ -494,7 +494,7 @@ const CitizenFormPage = () => {
                       required: "Street name is required",
                     })}
                     fullWidth
-                    label="Street Name"
+                    label="שם רחוב"
                     required
                     error={!!errors.streetName}
                     helperText={errors.streetName?.message}
@@ -515,7 +515,7 @@ const CitizenFormPage = () => {
                       required: "Building number is required",
                     })}
                     fullWidth
-                    label="Building Number"
+                    label="מס' בית"
                     required
                     error={!!errors.buildingNumber}
                     helperText={errors.buildingNumber?.message}
@@ -536,7 +536,7 @@ const CitizenFormPage = () => {
                       required: "Flat number is required",
                     })}
                     fullWidth
-                    label="Flat Number"
+                    label="מס' דירה"
                     required
                     error={!!errors.flatNumber}
                     helperText={errors.flatNumber?.message}
@@ -566,7 +566,7 @@ const CitizenFormPage = () => {
                         color="primary"
                       />
                     }
-                    label="Address is Wrong"
+                    label="אם הכתובת אינה נכונה - יש ללחוץ על התיבת הסימון"
                   />
                 </Box>
               </Box>
@@ -575,7 +575,7 @@ const CitizenFormPage = () => {
             {/* New Address (if address is wrong) */}
             <Paper sx={{ p: 3, mb: 3 }}>
               <Typography variant="h6" component="h2" sx={{ mb: 3 }}>
-                New Address (if current address is wrong)
+                עדכון כתובת
               </Typography>
 
               <Box sx={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
@@ -583,7 +583,7 @@ const CitizenFormPage = () => {
                   <TextField
                     {...register("newStreetName")}
                     fullWidth
-                    label="New Street Name"
+                    label="שם רחוב"
                     disabled={!watch("isAddressWrong")}
                     sx={{
                       "& .MuiInputBase-root.Mui-disabled": {
@@ -597,7 +597,7 @@ const CitizenFormPage = () => {
                   <TextField
                     {...register("newBuildingNumber")}
                     fullWidth
-                    label="New Building Number"
+                    label="מס' בית"
                     disabled={!watch("isAddressWrong")}
                     sx={{
                       "& .MuiInputBase-root.Mui-disabled": {
@@ -611,7 +611,7 @@ const CitizenFormPage = () => {
                   <TextField
                     {...register("newFlatNumber")}
                     fullWidth
-                    label="New Flat Number"
+                    label="מס' דירה"
                     disabled={!watch("isAddressWrong")}
                     sx={{
                       "& .MuiInputBase-root.Mui-disabled": {
@@ -639,23 +639,13 @@ const CitizenFormPage = () => {
               }}
             >
               <Button
-                variant="outlined"
-                onClick={() => {
-                  console.log("Test navigation clicked");
-                  navigate("/operator", { replace: true });
-                }}
-                sx={{ minWidth: 120 }}
-              >
-                Test Nav
-              </Button>
-              <Button
                 type="submit"
                 variant="contained"
                 disabled={loading || !isValid}
                 startIcon={loading ? <CircularProgress size={20} /> : <Save />}
                 sx={{ minWidth: 140 }}
               >
-                {loading ? "Saving..." : "Save Changes"}
+                {loading ? "Saving..." : "שמירה"}
               </Button>
             </Box>
           </Box>
@@ -672,7 +662,7 @@ const CitizenFormPage = () => {
               }}
               sx={{ minWidth: 120 }}
             >
-              Cancel
+              ביטול
             </Button>
           </Box>
         </CardContent>
