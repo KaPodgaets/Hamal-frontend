@@ -60,6 +60,7 @@ const CitizenFormPage = () => {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors, isValid },
   } = useForm<CitizenFormData>({
     mode: "onChange", // Enable real-time validation
@@ -217,6 +218,69 @@ const CitizenFormPage = () => {
           </Box>
 
           <Box component="form" onSubmit={handleSubmit(onSubmit)}>
+            {/* Phone Numbers - Moved to top */}
+            <Paper sx={{ p: 3, mb: 3 }}>
+              <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
+                <Phone sx={{ mr: 1, color: "primary.main" }} />
+                <Typography variant="h6" component="h2">
+                  Phone Numbers
+                </Typography>
+              </Box>
+
+              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
+                <Box sx={{ flex: "1 1 300px", minWidth: 0 }}>
+                  <TextField
+                    {...register("phone1")}
+                    fullWidth
+                    label="Phone 1"
+                    type="tel"
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                    sx={{
+                      "& .MuiInputBase-input.Mui-readOnly": {
+                        backgroundColor: "grey.100",
+                      },
+                    }}
+                  />
+                </Box>
+
+                <Box sx={{ flex: "1 1 300px", minWidth: 0 }}>
+                  <TextField
+                    {...register("phone2")}
+                    fullWidth
+                    label="Phone 2"
+                    type="tel"
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                    sx={{
+                      "& .MuiInputBase-input.Mui-readOnly": {
+                        backgroundColor: "grey.100",
+                      },
+                    }}
+                  />
+                </Box>
+
+                <Box sx={{ flex: "1 1 300px", minWidth: 0 }}>
+                  <TextField
+                    {...register("phone3")}
+                    fullWidth
+                    label="Phone 3"
+                    type="tel"
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                    sx={{
+                      "& .MuiInputBase-input.Mui-readOnly": {
+                        backgroundColor: "grey.100",
+                      },
+                    }}
+                  />
+                </Box>
+              </Box>
+            </Paper>
+
             {/* Personal Information */}
             <Paper sx={{ p: 3, mb: 3 }}>
               <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
@@ -237,6 +301,14 @@ const CitizenFormPage = () => {
                     required
                     error={!!errors.firstName}
                     helperText={errors.firstName?.message}
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                    sx={{
+                      "& .MuiInputBase-input.Mui-readOnly": {
+                        backgroundColor: "grey.100",
+                      },
+                    }}
                   />
                 </Box>
 
@@ -250,6 +322,14 @@ const CitizenFormPage = () => {
                     required
                     error={!!errors.lastName}
                     helperText={errors.lastName?.message}
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                    sx={{
+                      "& .MuiInputBase-input.Mui-readOnly": {
+                        backgroundColor: "grey.100",
+                      },
+                    }}
                   />
                 </Box>
 
@@ -269,6 +349,33 @@ const CitizenFormPage = () => {
                     required
                     error={!!errors.familyNumber}
                     helperText={errors.familyNumber?.message}
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                    sx={{
+                      "& .MuiInputBase-input.Mui-readOnly": {
+                        backgroundColor: "grey.100",
+                      },
+                    }}
+                  />
+                </Box>
+
+                <Box
+                  sx={{
+                    flex: "1 1 300px",
+                    minWidth: 0,
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        {...register("isAnsweredTheCall")}
+                        color="primary"
+                      />
+                    }
+                    label="Citizen Answered The Call"
                   />
                 </Box>
 
@@ -310,6 +417,14 @@ const CitizenFormPage = () => {
                     required
                     error={!!errors.streetName}
                     helperText={errors.streetName?.message}
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                    sx={{
+                      "& .MuiInputBase-input.Mui-readOnly": {
+                        backgroundColor: "grey.100",
+                      },
+                    }}
                   />
                 </Box>
 
@@ -323,6 +438,14 @@ const CitizenFormPage = () => {
                     required
                     error={!!errors.buildingNumber}
                     helperText={errors.buildingNumber?.message}
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                    sx={{
+                      "& .MuiInputBase-input.Mui-readOnly": {
+                        backgroundColor: "grey.100",
+                      },
+                    }}
                   />
                 </Box>
 
@@ -336,6 +459,14 @@ const CitizenFormPage = () => {
                     required
                     error={!!errors.flatNumber}
                     helperText={errors.flatNumber?.message}
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                    sx={{
+                      "& .MuiInputBase-input.Mui-readOnly": {
+                        backgroundColor: "grey.100",
+                      },
+                    }}
                   />
                 </Box>
 
@@ -360,7 +491,7 @@ const CitizenFormPage = () => {
               </Box>
             </Paper>
 
-            {/* New Address */}
+            {/* New Address (if address is wrong) */}
             <Paper sx={{ p: 3, mb: 3 }}>
               <Typography variant="h6" component="h2" sx={{ mb: 3 }}>
                 New Address (if current address is wrong)
@@ -372,6 +503,12 @@ const CitizenFormPage = () => {
                     {...register("newStreetName")}
                     fullWidth
                     label="New Street Name"
+                    disabled={!watch("isAddressWrong")}
+                    sx={{
+                      "& .MuiInputBase-root.Mui-disabled": {
+                        backgroundColor: "grey.100",
+                      },
+                    }}
                   />
                 </Box>
 
@@ -380,6 +517,12 @@ const CitizenFormPage = () => {
                     {...register("newBuildingNumber")}
                     fullWidth
                     label="New Building Number"
+                    disabled={!watch("isAddressWrong")}
+                    sx={{
+                      "& .MuiInputBase-root.Mui-disabled": {
+                        backgroundColor: "grey.100",
+                      },
+                    }}
                   />
                 </Box>
 
@@ -388,65 +531,15 @@ const CitizenFormPage = () => {
                     {...register("newFlatNumber")}
                     fullWidth
                     label="New Flat Number"
+                    disabled={!watch("isAddressWrong")}
+                    sx={{
+                      "& .MuiInputBase-root.Mui-disabled": {
+                        backgroundColor: "grey.100",
+                      },
+                    }}
                   />
                 </Box>
               </Box>
-            </Paper>
-
-            {/* Phone Numbers */}
-            <Paper sx={{ p: 3, mb: 3 }}>
-              <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
-                <Phone sx={{ mr: 1, color: "primary.main" }} />
-                <Typography variant="h6" component="h2">
-                  Phone Numbers
-                </Typography>
-              </Box>
-
-              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
-                <Box sx={{ flex: "1 1 300px", minWidth: 0 }}>
-                  <TextField
-                    {...register("phone1")}
-                    fullWidth
-                    label="Phone 1"
-                    type="tel"
-                  />
-                </Box>
-
-                <Box sx={{ flex: "1 1 300px", minWidth: 0 }}>
-                  <TextField
-                    {...register("phone2")}
-                    fullWidth
-                    label="Phone 2"
-                    type="tel"
-                  />
-                </Box>
-
-                <Box sx={{ flex: "1 1 300px", minWidth: 0 }}>
-                  <TextField
-                    {...register("phone3")}
-                    fullWidth
-                    label="Phone 3"
-                    type="tel"
-                  />
-                </Box>
-              </Box>
-            </Paper>
-
-            {/* Call Status */}
-            <Paper sx={{ p: 3, mb: 3 }}>
-              <Typography variant="h6" component="h2" sx={{ mb: 3 }}>
-                Call Status
-              </Typography>
-
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    {...register("isAnsweredTheCall")}
-                    color="primary"
-                  />
-                }
-                label="Citizen Answered The Call"
-              />
             </Paper>
 
             {error && (
