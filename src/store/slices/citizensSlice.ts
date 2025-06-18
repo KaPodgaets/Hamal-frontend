@@ -20,6 +20,10 @@ interface CitizenResponse {
   phone2: string | null;
   phone3: string | null;
   isAnsweredTheCall: boolean;
+  hasMamad: boolean;
+  hasMiklatPrati: boolean;
+  hasMiklatZiburi: boolean;
+  hasMobilityRestriction: boolean;
 }
 
 interface UpdateCitizenRequest {
@@ -38,6 +42,10 @@ interface UpdateCitizenRequest {
   phone2: string | null;
   phone3: string | null;
   isAnsweredTheCall: boolean;
+  hasMamad: boolean;
+  hasMiklatPrati: boolean;
+  hasMiklatZiburi: boolean;
+  hasMobilityRestriction: boolean;
 }
 
 interface CitizensState {

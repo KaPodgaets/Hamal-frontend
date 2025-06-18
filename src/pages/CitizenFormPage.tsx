@@ -47,6 +47,10 @@ interface CitizenFormData {
   phone2: string | null;
   phone3: string | null;
   isAnsweredTheCall: boolean;
+  hasMamad: boolean;
+  hasMiklatPrati: boolean;
+  hasMiklatZiburi: boolean;
+  hasMobilityRestriction: boolean;
 }
 
 const CitizenFormPage = () => {
@@ -112,6 +116,10 @@ const CitizenFormPage = () => {
       phone2: data.phone2 || null,
       phone3: data.phone3 || null,
       isAnsweredTheCall: data.isAnsweredTheCall || false,
+      hasMamad: data.hasMamad || false,
+      hasMiklatPrati: data.hasMiklatPrati || false,
+      hasMiklatZiburi: data.hasMiklatZiburi || false,
+      hasMobilityRestriction: data.hasMobilityRestriction || false,
     };
 
     console.log("Formatted data for API:", formattedData);
@@ -392,6 +400,79 @@ const CitizenFormPage = () => {
                       <Checkbox {...register("isLonely")} color="primary" />
                     }
                     label="Is Lonely"
+                  />
+                </Box>
+
+                <Box
+                  sx={{
+                    flex: "1 1 300px",
+                    minWidth: 0,
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <FormControlLabel
+                    control={
+                      <Checkbox {...register("hasMamad")} color="primary" />
+                    }
+                    label="Has Mamad"
+                  />
+                </Box>
+
+                <Box
+                  sx={{
+                    flex: "1 1 300px",
+                    minWidth: 0,
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        {...register("hasMiklatPrati")}
+                        color="primary"
+                      />
+                    }
+                    label="Has Miklat Prati"
+                  />
+                </Box>
+
+                <Box
+                  sx={{
+                    flex: "1 1 300px",
+                    minWidth: 0,
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        {...register("hasMiklatZiburi")}
+                        color="primary"
+                      />
+                    }
+                    label="Has Miklat Ziburi"
+                  />
+                </Box>
+
+                <Box
+                  sx={{
+                    flex: "1 1 300px",
+                    minWidth: 0,
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        {...register("hasMobilityRestriction")}
+                        color="primary"
+                      />
+                    }
+                    label="Has Mobility Restriction"
                   />
                 </Box>
               </Box>
