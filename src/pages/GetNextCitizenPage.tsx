@@ -1,6 +1,17 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import {
+  Box,
+  Container,
+  Typography,
+  Button,
+  Alert,
+  CircularProgress,
+  Card,
+  CardContent,
+} from "@mui/material";
+import { Phone, Celebration, Logout } from "@mui/icons-material";
 import { getNextCitizenThunk, clearError } from "../store/slices/citizensSlice";
 import { logout } from "../store/slices/authSlice";
 import type { AppDispatch, RootState } from "../store/store";
@@ -37,74 +48,134 @@ const GetNextCitizenPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+    <Container
+      maxWidth="sm"
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        py: 4,
+      }}
+    >
+      <Box sx={{ width: "100%" }}>
+        {/* Header */}
+        <Box sx={{ textAlign: "center", mb: 4 }}>
+          <Typography
+            variant="h3"
+            component="h1"
+            sx={{ fontWeight: 700, mb: 1 }}
+          >
             Operator Dashboard
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          </Typography>
+          <Typography variant="body1" color="text.secondary">
             Get the next citizen from the queue
-          </p>
-        </div>
+          </Typography>
+        </Box>
 
-        <div className="bg-white rounded-lg shadow-lg p-8 text-center">
-          {queueIsEmpty ? (
-            <div className="space-y-4">
-              <div className="text-6xl text-gray-400 mb-4">🎉</div>
-              <h3 className="text-xl font-semibold text-gray-900">
-                No more citizens to call
-              </h3>
-              <p className="text-gray-600">
-                Thank you for your passion and dedication!
-              </p>
-              <p className="text-sm text-gray-500">
-                The queue is currently empty. Please check back later.
-              </p>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              <div className="text-6xl text-blue-500 mb-4">📞</div>
-              <h3 className="text-xl font-semibold text-gray-900">
-                Ready for the next call?
-              </h3>
-              <p className="text-gray-600">
-                Click the button below to get the next citizen from the queue.
-              </p>
-              <button
-                onClick={handleGetNextCitizen}
-                disabled={loading}
-                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? (
-                  <div className="flex items-center">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Getting next citizen...
-                  </div>
-                ) : (
-                  "Get Next Citizen"
-                )}
-              </button>
-            </div>
-          )}
+        {/* Main Content Card */}
+        <Card sx={{ mb: 3 }}>
+          <CardContent sx={{ p: { xs: 3, sm: 4 }, textAlign: "center" }}>
+            {queueIsEmpty ? (
+              <Box sx={{ py: 2 }}>
+                <Celebration
+                  sx={{
+                    fontSize: 80,
+                    color: "success.main",
+                    mb: 2,
+                  }}
+                />
+                <Typography
+                  variant="h5"
+                  component="h2"
+                  sx={{ fontWeight: 600, mb: 2 }}
+                >
+                  No more citizens to call
+                </Typography>
+                <Typography
+                  variant="body1"
+                  color="text.secondary"
+                  sx={{ mb: 1 }}
+                >
+                  Thank you for your passion and dedication!
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  The queue is currently empty. Please check back later.
+                </Typography>
+              </Box>
+            ) : (
+              <Box sx={{ py: 2 }}>
+                <Phone
+                  sx={{
+                    fontSize: 80,
+                    color: "primary.main",
+                    mb: 2,
+                  }}
+                />
+                <Typography
+                  variant="h5"
+                  component="h2"
+                  sx={{ fontWeight: 600, mb: 2 }}
+                >
+                  Ready for the next call?
+                </Typography>
+                <Typography
+                  variant="body1"
+                  color="text.secondary"
+                  sx={{ mb: 3 }}
+                >
+                  Click the button below to get the next citizen from the queue.
+                </Typography>
+                <Button
+                  onClick={handleGetNextCitizen}
+                  disabled={loading}
+                  variant="contained"
+                  size="large"
+                  startIcon={
+                    loading ? (
+                      <CircularProgress size={20} color="inherit" />
+                    ) : (
+                      <Phone />
+                    )
+                  }
+                  sx={{
+                    py: 1.5,
+                    px: 4,
+                    fontSize: "1.1rem",
+                    fontWeight: 600,
+                    minWidth: 200,
+                  }}
+                >
+                  {loading ? "Getting next citizen..." : "Get Next Citizen"}
+                </Button>
+              </Box>
+            )}
 
-          {error && (
-            <div className="mt-4 rounded-md bg-red-50 p-4">
-              <div className="text-sm text-red-700">{error}</div>
-            </div>
-          )}
-        </div>
+            {error && (
+              <Alert severity="error" sx={{ mt: 3 }}>
+                {error}
+              </Alert>
+            )}
+          </CardContent>
+        </Card>
 
-        <div className="text-center">
-          <button
+        {/* Sign Out Button */}
+        <Box sx={{ textAlign: "center" }}>
+          <Button
             onClick={handleSignOut}
-            className="text-blue-600 hover:text-blue-500 text-sm"
+            startIcon={<Logout />}
+            sx={{
+              color: "text.secondary",
+              "&:hover": {
+                color: "primary.main",
+              },
+            }}
           >
             Sign out
-          </button>
-        </div>
-      </div>
-    </div>
+          </Button>
+        </Box>
+      </Box>
+    </Container>
   );
 };
 

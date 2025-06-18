@@ -1,5 +1,36 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  Box,
+  Container,
+  Card,
+  CardContent,
+  Button,
+  Typography,
+  Alert,
+  Paper,
+  TextField,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  IconButton,
+  CircularProgress,
+  Chip,
+} from "@mui/material";
+import {
+  ArrowBack,
+  PersonAdd,
+  Delete,
+  AdminPanelSettings,
+  Person,
+} from "@mui/icons-material";
 import api from "../services/api";
 
 interface User {
@@ -50,24 +81,6 @@ const AdminUserManagementPage = () => {
     }
   };
 
-  // TODO: Use handleUpdateUser in your component, e.g. in an edit form or inline edit action for users.
-  // Example usage in a table row:
-  // <button onClick={() => handleUpdateUser(user.id, user.username, user.role)}>Update</button>
-  const handleUpdateUser = async (
-    id: number,
-    username: string,
-    role: number
-  ) => {
-    try {
-      await api.put(`/api/Users/${id}`, { username, role });
-      alert("User updated successfully");
-      fetchUsers();
-    } catch (error) {
-      console.error("Failed to update user:", error);
-      alert("Failed to update user");
-    }
-  };
-
   const handleDeleteUser = async (id: number) => {
     if (!confirm("Are you sure you want to delete this user?")) {
       return;
@@ -85,128 +98,165 @@ const AdminUserManagementPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading users...</p>
-        </div>
-      </div>
+      <Container
+        maxWidth="lg"
+        sx={{
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          py: 4,
+        }}
+      >
+        <Box sx={{ textAlign: "center" }}>
+          <CircularProgress size={60} sx={{ mb: 2 }} />
+          <Typography variant="h6" color="text.secondary">
+            Loading users...
+          </Typography>
+        </Box>
+      </Container>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="bg-white rounded-lg shadow-lg p-8">
-          <div className="flex justify-between items-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Card>
+        <CardContent sx={{ p: { xs: 3, sm: 4 } }}>
+          {/* Header */}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mb: 4,
+            }}
+          >
+            <Typography variant="h4" component="h1" sx={{ fontWeight: 600 }}>
               User Management
-            </h1>
-            <button
+            </Typography>
+            <Button
+              variant="outlined"
+              startIcon={<ArrowBack />}
               onClick={() => navigate("/admin")}
-              className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+              sx={{ minWidth: 120 }}
             >
-              Back to Admin Dashboard
-            </button>
-          </div>
+              Back to Dashboard
+            </Button>
+          </Box>
 
           {error && (
-            <div className="mb-6 rounded-md bg-red-50 p-4">
-              <div className="text-sm text-red-700">{error}</div>
-            </div>
+            <Alert severity="error" sx={{ mb: 3 }}>
+              {error}
+            </Alert>
           )}
 
           {/* Create User Form */}
-          <div className="mb-8 border rounded-lg p-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">
-              Create New User
-            </h3>
-            <form
+          <Paper sx={{ p: 3, mb: 4 }}>
+            <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
+              <PersonAdd sx={{ fontSize: 32, color: "primary.main", mr: 2 }} />
+              <Typography variant="h6" component="h2" sx={{ fontWeight: 600 }}>
+                Create New User
+              </Typography>
+            </Box>
+
+            <Box
+              component="form"
               onSubmit={handleCreateUser}
-              className="grid grid-cols-1 md:grid-cols-4 gap-4"
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 2,
+                alignItems: "flex-end",
+              }}
             >
-              <input
+              <TextField
                 name="username"
-                type="text"
-                placeholder="Username"
+                label="Username"
                 required
-                className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                sx={{ flex: "1 1 200px", minWidth: 0 }}
               />
-              <input
+              <TextField
                 name="password"
+                label="Password"
                 type="password"
-                placeholder="Password"
                 required
-                className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                sx={{ flex: "1 1 200px", minWidth: 0 }}
               />
-              <select
-                name="role"
-                required
-                className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="">Select Role</option>
-                <option value="0">Admin</option>
-                <option value="1">Operator</option>
-              </select>
-              <button
+              <FormControl sx={{ flex: "1 1 200px", minWidth: 0 }}>
+                <InputLabel>Role</InputLabel>
+                <Select name="role" label="Role" required defaultValue="">
+                  <MenuItem value={0}>Admin</MenuItem>
+                  <MenuItem value={1}>Operator</MenuItem>
+                </Select>
+              </FormControl>
+              <Button
                 type="submit"
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                variant="contained"
+                startIcon={<PersonAdd />}
+                sx={{ minWidth: 140 }}
               >
                 Create User
-              </button>
-            </form>
-          </div>
+              </Button>
+            </Box>
+          </Paper>
 
           {/* Users List */}
-          <div>
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Users</h3>
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      ID
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Username
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Role
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+          <Paper sx={{ p: 3 }}>
+            <Typography
+              variant="h6"
+              component="h2"
+              sx={{ fontWeight: 600, mb: 3 }}
+            >
+              Users
+            </Typography>
+
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell sx={{ fontWeight: 600 }}>ID</TableCell>
+                    <TableCell sx={{ fontWeight: 600 }}>Username</TableCell>
+                    <TableCell sx={{ fontWeight: 600 }}>Role</TableCell>
+                    <TableCell sx={{ fontWeight: 600 }}>Actions</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
                   {users.map((user) => (
-                    <tr key={user.id}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {user.id}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {user.username}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {user.role === 0 ? "Admin" : "Operator"}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button
+                    <TableRow key={user.id} hover>
+                      <TableCell>{user.id}</TableCell>
+                      <TableCell>{user.username}</TableCell>
+                      <TableCell>
+                        <Chip
+                          icon={
+                            user.role === 0 ? (
+                              <AdminPanelSettings />
+                            ) : (
+                              <Person />
+                            )
+                          }
+                          label={user.role === 0 ? "Admin" : "Operator"}
+                          color={user.role === 0 ? "primary" : "secondary"}
+                          size="small"
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <IconButton
                           onClick={() => handleDeleteUser(user.id)}
-                          className="text-red-600 hover:text-red-900"
+                          color="error"
+                          size="small"
                         >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
+                          <Delete />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
                   ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Paper>
+        </CardContent>
+      </Card>
+    </Container>
   );
 };
 

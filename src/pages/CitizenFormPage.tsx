@@ -3,6 +3,28 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import {
+  Box,
+  Container,
+  Card,
+  CardContent,
+  TextField,
+  Button,
+  Typography,
+  Alert,
+  CircularProgress,
+  FormControlLabel,
+  Checkbox,
+  Paper,
+} from "@mui/material";
+import {
+  Person,
+  Home,
+  Phone,
+  Save,
+  Cancel,
+  ArrowBack,
+} from "@mui/icons-material";
+import {
   updateCitizenThunk,
   clearError,
   clearCurrentCitizen,
@@ -115,10 +137,17 @@ const CitizenFormPage = () => {
   };
 
   const handleCancel = () => {
+    console.log("=== CANCEL BUTTON DEBUG ===");
+    console.log("Cancel button clicked");
+    console.log("navigate function:", typeof navigate);
+    console.log("Current location:", window.location.href);
+
     // Simple alert to confirm button click
     alert("Cancel button clicked! Attempting navigation...");
 
     try {
+      console.log("Attempting React Router navigation...");
+      // Try React Router navigation first
       navigate("/operator", { replace: true });
       console.log("React Router navigation called successfully");
     } catch (error) {
@@ -126,6 +155,7 @@ const CitizenFormPage = () => {
       console.log("Falling back to window.location...");
       // Fallback to window.location
       window.location.href = "/operator";
+      console.log("window.location.href set to /operator");
     }
 
     // Additional test - try immediate navigation
@@ -140,80 +170,91 @@ const CitizenFormPage = () => {
 
   if (!currentCitizen) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading citizen data...</p>
-        </div>
-      </div>
+      <Container
+        maxWidth="lg"
+        sx={{
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          py: 4,
+        }}
+      >
+        <Box sx={{ textAlign: "center" }}>
+          <CircularProgress size={60} sx={{ mb: 2 }} />
+          <Typography variant="h6" color="text.secondary">
+            Loading citizen data...
+          </Typography>
+        </Box>
+      </Container>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-lg shadow-lg p-8">
-          <div className="flex justify-between items-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Card>
+        <CardContent sx={{ p: { xs: 3, sm: 4 } }}>
+          {/* Header */}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mb: 4,
+            }}
+          >
+            <Typography variant="h4" component="h1" sx={{ fontWeight: 600 }}>
               Citizen Information
-            </h1>
-            <div className="flex gap-4">
-              <button
-                type="button"
-                onClick={handleCancel}
-                className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
+            </Typography>
+            <Button
+              variant="outlined"
+              startIcon={<ArrowBack />}
+              onClick={handleCancel}
+              sx={{ minWidth: 120 }}
+            >
+              Cancel
+            </Button>
+          </Box>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <Box component="form" onSubmit={handleSubmit(onSubmit)}>
             {/* Personal Information */}
-            <div className="border-t pt-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">
-                Personal Information
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    First Name *
-                  </label>
-                  <input
+            <Paper sx={{ p: 3, mb: 3 }}>
+              <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
+                <Person sx={{ mr: 1, color: "primary.main" }} />
+                <Typography variant="h6" component="h2">
+                  Personal Information
+                </Typography>
+              </Box>
+
+              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
+                <Box sx={{ flex: "1 1 300px", minWidth: 0 }}>
+                  <TextField
                     {...register("firstName", {
                       required: "First name is required",
                     })}
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    fullWidth
+                    label="First Name"
+                    required
+                    error={!!errors.firstName}
+                    helperText={errors.firstName?.message}
                   />
-                  {errors.firstName && (
-                    <p className="mt-1 text-sm text-red-600">
-                      {errors.firstName.message}
-                    </p>
-                  )}
-                </div>
+                </Box>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Last Name *
-                  </label>
-                  <input
+                <Box sx={{ flex: "1 1 300px", minWidth: 0 }}>
+                  <TextField
                     {...register("lastName", {
                       required: "Last name is required",
                     })}
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    fullWidth
+                    label="Last Name"
+                    required
+                    error={!!errors.lastName}
+                    helperText={errors.lastName?.message}
                   />
-                  {errors.lastName && (
-                    <p className="mt-1 text-sm text-red-600">
-                      {errors.lastName.message}
-                    </p>
-                  )}
-                </div>
+                </Box>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Family Number *
-                  </label>
-                  <input
+                <Box sx={{ flex: "1 1 300px", minWidth: 0 }}>
+                  <TextField
                     {...register("familyNumber", {
                       required: "Family number is required",
                       valueAsNumber: true,
@@ -222,253 +263,247 @@ const CitizenFormPage = () => {
                         message: "Family number must be at least 1",
                       },
                     })}
+                    fullWidth
+                    label="Family Number"
                     type="number"
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    required
+                    error={!!errors.familyNumber}
+                    helperText={errors.familyNumber?.message}
                   />
-                  {errors.familyNumber && (
-                    <p className="mt-1 text-sm text-red-600">
-                      {errors.familyNumber.message}
-                    </p>
-                  )}
-                </div>
+                </Box>
 
-                <div className="flex items-center space-x-4">
-                  <div className="flex items-center">
-                    <input
-                      {...register("isLonely")}
-                      type="checkbox"
-                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                    />
-                    <label className="ml-2 block text-sm text-gray-700">
-                      Is Lonely
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
+                <Box
+                  sx={{
+                    flex: "1 1 300px",
+                    minWidth: 0,
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <FormControlLabel
+                    control={
+                      <Checkbox {...register("isLonely")} color="primary" />
+                    }
+                    label="Is Lonely"
+                  />
+                </Box>
+              </Box>
+            </Paper>
 
             {/* Current Address */}
-            <div className="border-t pt-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">
-                Current Address
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Street Name *
-                  </label>
-                  <input
+            <Paper sx={{ p: 3, mb: 3 }}>
+              <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
+                <Home sx={{ mr: 1, color: "primary.main" }} />
+                <Typography variant="h6" component="h2">
+                  Current Address
+                </Typography>
+              </Box>
+
+              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
+                <Box sx={{ flex: "1 1 300px", minWidth: 0 }}>
+                  <TextField
                     {...register("streetName", {
                       required: "Street name is required",
                     })}
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    fullWidth
+                    label="Street Name"
+                    required
+                    error={!!errors.streetName}
+                    helperText={errors.streetName?.message}
                   />
-                  {errors.streetName && (
-                    <p className="mt-1 text-sm text-red-600">
-                      {errors.streetName.message}
-                    </p>
-                  )}
-                </div>
+                </Box>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Building Number *
-                  </label>
-                  <input
+                <Box sx={{ flex: "1 1 300px", minWidth: 0 }}>
+                  <TextField
                     {...register("buildingNumber", {
                       required: "Building number is required",
                     })}
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    fullWidth
+                    label="Building Number"
+                    required
+                    error={!!errors.buildingNumber}
+                    helperText={errors.buildingNumber?.message}
                   />
-                  {errors.buildingNumber && (
-                    <p className="mt-1 text-sm text-red-600">
-                      {errors.buildingNumber.message}
-                    </p>
-                  )}
-                </div>
+                </Box>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Flat Number *
-                  </label>
-                  <input
+                <Box sx={{ flex: "1 1 300px", minWidth: 0 }}>
+                  <TextField
                     {...register("flatNumber", {
                       required: "Flat number is required",
                     })}
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    fullWidth
+                    label="Flat Number"
+                    required
+                    error={!!errors.flatNumber}
+                    helperText={errors.flatNumber?.message}
                   />
-                  {errors.flatNumber && (
-                    <p className="mt-1 text-sm text-red-600">
-                      {errors.flatNumber.message}
-                    </p>
-                  )}
-                </div>
-              </div>
+                </Box>
 
-              <div className="mt-4">
-                <div className="flex items-center">
-                  <input
-                    {...register("isAddressWrong")}
-                    type="checkbox"
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                <Box
+                  sx={{
+                    flex: "1 1 300px",
+                    minWidth: 0,
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        {...register("isAddressWrong")}
+                        color="primary"
+                      />
+                    }
+                    label="Address is Wrong"
                   />
-                  <label className="ml-2 block text-sm text-gray-700">
-                    Address is Wrong
-                  </label>
-                </div>
-              </div>
-            </div>
+                </Box>
+              </Box>
+            </Paper>
 
-            {/* New Address (if address is wrong) */}
-            <div className="border-t pt-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">
+            {/* New Address */}
+            <Paper sx={{ p: 3, mb: 3 }}>
+              <Typography variant="h6" component="h2" sx={{ mb: 3 }}>
                 New Address (if current address is wrong)
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    New Street Name
-                  </label>
-                  <input
+              </Typography>
+
+              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
+                <Box sx={{ flex: "1 1 300px", minWidth: 0 }}>
+                  <TextField
                     {...register("newStreetName")}
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    fullWidth
+                    label="New Street Name"
                   />
-                </div>
+                </Box>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    New Building Number
-                  </label>
-                  <input
+                <Box sx={{ flex: "1 1 300px", minWidth: 0 }}>
+                  <TextField
                     {...register("newBuildingNumber")}
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    fullWidth
+                    label="New Building Number"
                   />
-                </div>
+                </Box>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    New Flat Number
-                  </label>
-                  <input
+                <Box sx={{ flex: "1 1 300px", minWidth: 0 }}>
+                  <TextField
                     {...register("newFlatNumber")}
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    fullWidth
+                    label="New Flat Number"
                   />
-                </div>
-              </div>
-            </div>
+                </Box>
+              </Box>
+            </Paper>
 
             {/* Phone Numbers */}
-            <div className="border-t pt-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">
-                Phone Numbers
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Phone 1
-                  </label>
-                  <input
+            <Paper sx={{ p: 3, mb: 3 }}>
+              <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
+                <Phone sx={{ mr: 1, color: "primary.main" }} />
+                <Typography variant="h6" component="h2">
+                  Phone Numbers
+                </Typography>
+              </Box>
+
+              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
+                <Box sx={{ flex: "1 1 300px", minWidth: 0 }}>
+                  <TextField
                     {...register("phone1")}
+                    fullWidth
+                    label="Phone 1"
                     type="tel"
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   />
-                </div>
+                </Box>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Phone 2
-                  </label>
-                  <input
+                <Box sx={{ flex: "1 1 300px", minWidth: 0 }}>
+                  <TextField
                     {...register("phone2")}
+                    fullWidth
+                    label="Phone 2"
                     type="tel"
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   />
-                </div>
+                </Box>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Phone 3
-                  </label>
-                  <input
+                <Box sx={{ flex: "1 1 300px", minWidth: 0 }}>
+                  <TextField
                     {...register("phone3")}
+                    fullWidth
+                    label="Phone 3"
                     type="tel"
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   />
-                </div>
-              </div>
-            </div>
+                </Box>
+              </Box>
+            </Paper>
 
             {/* Call Status */}
-            <div className="border-t pt-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">
+            <Paper sx={{ p: 3, mb: 3 }}>
+              <Typography variant="h6" component="h2" sx={{ mb: 3 }}>
                 Call Status
-              </h3>
-              <div className="flex items-center">
-                <input
-                  {...register("isAnsweredTheCall")}
-                  type="checkbox"
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                />
-                <label className="ml-2 block text-sm text-gray-700">
-                  Citizen Answered The Call
-                </label>
-              </div>
-            </div>
+              </Typography>
+
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    {...register("isAnsweredTheCall")}
+                    color="primary"
+                  />
+                }
+                label="Citizen Answered The Call"
+              />
+            </Paper>
 
             {error && (
-              <div className="rounded-md bg-red-50 p-4">
-                <div className="text-sm text-red-700">{error}</div>
-              </div>
+              <Alert severity="error" sx={{ mb: 3 }}>
+                {error}
+              </Alert>
             )}
 
-            <div className="flex justify-end gap-4 pt-6 border-t">
-              <button
-                type="button"
+            {/* Action Buttons */}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                gap: 2,
+                pt: 3,
+              }}
+            >
+              <Button
+                variant="outlined"
                 onClick={() => {
                   console.log("Test navigation clicked");
                   navigate("/operator", { replace: true });
                 }}
-                className="px-4 py-2 border border-green-300 rounded-md text-sm font-medium text-green-700 hover:bg-green-50"
+                sx={{ minWidth: 120 }}
               >
                 Test Nav
-              </button>
-              <button
+              </Button>
+              <Button
                 type="submit"
+                variant="contained"
                 disabled={loading || !isValid}
-                className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                startIcon={loading ? <CircularProgress size={20} /> : <Save />}
+                sx={{ minWidth: 140 }}
               >
                 {loading ? "Saving..." : "Save Changes"}
-              </button>
-            </div>
-          </form>
+              </Button>
+            </Box>
+          </Box>
 
           {/* Cancel button outside form to prevent form interference */}
-          <div className="mt-6 flex justify-end gap-4">
-            <button
-              type="button"
-              onClick={() => {
-                alert("Direct navigation test");
-                window.location.href = "/operator";
-              }}
-              className="px-4 py-2 border border-red-300 rounded-md text-sm font-medium text-red-700 hover:bg-red-50"
-            >
-              Direct Nav Test
-            </button>
-            <button
-              type="button"
+          <Box sx={{ mt: 3, display: "flex", justifyContent: "flex-end" }}>
+            <Button
+              variant="outlined"
+              startIcon={<Cancel />}
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 handleCancel();
               }}
-              className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              sx={{ minWidth: 120 }}
             >
               Cancel
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+            </Button>
+          </Box>
+        </CardContent>
+      </Card>
+    </Container>
   );
 };
 

@@ -1,5 +1,20 @@
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import {
+  Box,
+  Container,
+  Card,
+  CardContent,
+  Button,
+  Typography,
+} from "@mui/material";
+import {
+  People,
+  Settings,
+  Logout,
+  Download,
+  Upload,
+} from "@mui/icons-material";
 import { logout } from "../store/slices/authSlice";
 import type { AppDispatch } from "../store/store";
 
@@ -13,57 +28,118 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-lg shadow-lg p-8">
-          <div className="flex justify-between items-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Card>
+        <CardContent sx={{ p: { xs: 3, sm: 4 } }}>
+          {/* Header */}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mb: 4,
+            }}
+          >
+            <Typography variant="h4" component="h1" sx={{ fontWeight: 600 }}>
               Admin Dashboard
-            </h1>
-            <button
+            </Typography>
+            <Button
+              variant="outlined"
+              startIcon={<Logout />}
               onClick={handleSignOut}
-              className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+              sx={{ minWidth: 120 }}
             >
               Sign out
-            </button>
-          </div>
+            </Button>
+          </Box>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Dashboard Cards */}
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
             {/* Citizen Data Management */}
-            <div className="border rounded-lg p-6 hover:shadow-md transition-shadow">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">
-                Citizen Data Management
-              </h3>
-              <p className="text-gray-600 mb-4">
-                Download, upload, and manage citizen data in bulk.
-              </p>
-              <button
-                onClick={() => navigate("/admin/citizen-data")}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-              >
-                Manage Citizen Data
-              </button>
-            </div>
+            <Card
+              sx={{
+                flex: "1 1 400px",
+                minWidth: 0,
+                cursor: "pointer",
+                transition: "all 0.2s ease-in-out",
+                "&:hover": {
+                  transform: "translateY(-2px)",
+                  boxShadow: "0 8px 25px rgba(0,0,0,0.15)",
+                },
+              }}
+              onClick={() => navigate("/admin/citizen-data")}
+            >
+              <CardContent sx={{ p: 3 }}>
+                <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+                  <People sx={{ fontSize: 40, color: "primary.main", mr: 2 }} />
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    sx={{ fontWeight: 600 }}
+                  >
+                    Citizen Data Management
+                  </Typography>
+                </Box>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mb: 3 }}
+                >
+                  Download, upload, and manage citizen data in bulk. Export data
+                  for analysis and import new records.
+                </Typography>
+                <Box sx={{ display: "flex", gap: 1 }}>
+                  <Download sx={{ fontSize: 20, color: "primary.main" }} />
+                  <Upload sx={{ fontSize: 20, color: "primary.main" }} />
+                </Box>
+              </CardContent>
+            </Card>
 
             {/* User Management */}
-            <div className="border rounded-lg p-6 hover:shadow-md transition-shadow">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">
-                User Management
-              </h3>
-              <p className="text-gray-600 mb-4">
-                Create, update, and delete user accounts.
-              </p>
-              <button
-                onClick={() => navigate("/admin/users")}
-                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
-              >
-                Manage Users
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+            <Card
+              sx={{
+                flex: "1 1 400px",
+                minWidth: 0,
+                cursor: "pointer",
+                transition: "all 0.2s ease-in-out",
+                "&:hover": {
+                  transform: "translateY(-2px)",
+                  boxShadow: "0 8px 25px rgba(0,0,0,0.15)",
+                },
+              }}
+              onClick={() => navigate("/admin/users")}
+            >
+              <CardContent sx={{ p: 3 }}>
+                <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+                  <Settings
+                    sx={{ fontSize: 40, color: "secondary.main", mr: 2 }}
+                  />
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    sx={{ fontWeight: 600 }}
+                  >
+                    User Management
+                  </Typography>
+                </Box>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mb: 3 }}
+                >
+                  Create, update, and delete user accounts. Manage roles and
+                  permissions for operators and administrators.
+                </Typography>
+                <Box sx={{ display: "flex", gap: 1 }}>
+                  <People sx={{ fontSize: 20, color: "secondary.main" }} />
+                  <Settings sx={{ fontSize: 20, color: "secondary.main" }} />
+                </Box>
+              </CardContent>
+            </Card>
+          </Box>
+        </CardContent>
+      </Card>
+    </Container>
   );
 };
 

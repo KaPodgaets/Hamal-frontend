@@ -1,4 +1,21 @@
 import { useNavigate } from "react-router-dom";
+import {
+  Box,
+  Container,
+  Card,
+  CardContent,
+  Button,
+  Typography,
+  Alert,
+  Paper,
+} from "@mui/material";
+import {
+  ArrowBack,
+  Download,
+  Upload,
+  DeleteForever,
+  Warning,
+} from "@mui/icons-material";
 import api from "../services/api";
 
 const AdminDataManagementPage = () => {
@@ -65,72 +82,127 @@ const AdminDataManagementPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-lg shadow-lg p-8">
-          <div className="flex justify-between items-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Card>
+        <CardContent sx={{ p: { xs: 3, sm: 4 } }}>
+          {/* Header */}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mb: 4,
+            }}
+          >
+            <Typography variant="h4" component="h1" sx={{ fontWeight: 600 }}>
               Citizen Data Management
-            </h1>
-            <button
+            </Typography>
+            <Button
+              variant="outlined"
+              startIcon={<ArrowBack />}
               onClick={() => navigate("/admin")}
-              className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+              sx={{ minWidth: 120 }}
             >
-              Back to Admin Dashboard
-            </button>
-          </div>
+              Back to Dashboard
+            </Button>
+          </Box>
 
-          <div className="space-y-8">
-            <div className="border rounded-lg p-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">
-                Download Citizens Data
-              </h3>
-              <p className="text-gray-600 mb-4">
-                Download the current list of all citizens as a CSV file.
-              </p>
-              <button
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+            {/* Download Section */}
+            <Paper sx={{ p: 3 }}>
+              <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+                <Download sx={{ fontSize: 32, color: "primary.main", mr: 2 }} />
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  sx={{ fontWeight: 600 }}
+                >
+                  Download Citizens Data
+                </Typography>
+              </Box>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                Download the current list of all citizens as a CSV file for
+                analysis or backup purposes.
+              </Typography>
+              <Button
+                variant="contained"
+                startIcon={<Download />}
                 onClick={handleDownloadCitizens}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                sx={{ minWidth: 160 }}
               >
                 Download Citizens
-              </button>
-            </div>
+              </Button>
+            </Paper>
 
-            <div className="border rounded-lg p-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">
-                Upload Citizens Data
-              </h3>
-              <p className="text-gray-600 mb-4">
+            {/* Upload Section */}
+            <Paper sx={{ p: 3 }}>
+              <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+                <Upload sx={{ fontSize: 32, color: "primary.main", mr: 2 }} />
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  sx={{ fontWeight: 600 }}
+                >
+                  Upload Citizens Data
+                </Typography>
+              </Box>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
                 Upload a CSV file containing citizen data to replace the current
-                list.
-              </p>
-              <input
-                type="file"
-                accept=".csv"
-                onChange={handleUploadCitizens}
-                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-              />
-            </div>
+                list. Make sure the file format matches the expected structure.
+              </Typography>
+              <Button
+                variant="outlined"
+                component="label"
+                startIcon={<Upload />}
+                sx={{ minWidth: 160 }}
+              >
+                Choose CSV File
+                <input
+                  type="file"
+                  accept=".csv"
+                  onChange={handleUploadCitizens}
+                  style={{ display: "none" }}
+                />
+              </Button>
+            </Paper>
 
-            <div className="border rounded-lg p-6 border-red-200 bg-red-50">
-              <h3 className="text-lg font-medium text-red-900 mb-4">
-                Clear All Citizen Data
-              </h3>
-              <p className="text-red-700 mb-4">
+            {/* Clear Data Section */}
+            <Paper
+              sx={{
+                p: 3,
+                border: "2px solid",
+                borderColor: "error.main",
+                bgcolor: "error.50",
+              }}
+            >
+              <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+                <Warning sx={{ fontSize: 32, color: "error.main", mr: 2 }} />
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  sx={{ fontWeight: 600, color: "error.main" }}
+                >
+                  Clear All Citizen Data
+                </Typography>
+              </Box>
+              <Alert severity="warning" sx={{ mb: 3 }}>
                 This action will permanently delete all citizen data from the
-                system.
-              </p>
-              <button
+                system. This operation cannot be undone.
+              </Alert>
+              <Button
+                variant="contained"
+                color="error"
+                startIcon={<DeleteForever />}
                 onClick={handleClearAllData}
-                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                sx={{ minWidth: 160 }}
               >
                 Clear All Data
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+              </Button>
+            </Paper>
+          </Box>
+        </CardContent>
+      </Card>
+    </Container>
   );
 };
 
