@@ -23,6 +23,7 @@ import {
   Save,
   Cancel,
   ArrowBack,
+  OpenInNew,
 } from "@mui/icons-material";
 import {
   updateCitizenThunk,
@@ -69,6 +70,8 @@ const CitizenFormPage = () => {
   } = useForm<CitizenFormData>({
     mode: "onChange", // Enable real-time validation
   });
+
+  const NAHARIYA_INFO_URL = "https://www.nahariya.muni.il/237";
 
   // Populate form when citizen data is available
   useEffect(() => {
@@ -177,6 +180,10 @@ const CitizenFormPage = () => {
     }, 1000);
   };
 
+  const handleOpenMokedLink = () => {
+    window.open(NAHARIYA_INFO_URL, "_blank", "noopener,noreferrer");
+  };
+
   if (!currentCitizen) {
     return (
       <Container
@@ -215,14 +222,25 @@ const CitizenFormPage = () => {
             <Typography variant="h4" component="h1" sx={{ fontWeight: 600 }}>
               פרטים
             </Typography>
-            <Button
-              variant="outlined"
-              startIcon={<ArrowBack />}
-              onClick={handleCancel}
-              sx={{ minWidth: 120 }}
-            >
-              ביטול
-            </Button>
+            <Box>
+              <Button
+                variant="outlined"
+                color="secondary"
+                startIcon={<OpenInNew />}
+                onClick={handleOpenMokedLink}
+                sx={{ mr: 2 }}
+              >
+                לפתוח קריאה מוקד 106
+              </Button>
+              <Button
+                variant="outlined"
+                startIcon={<ArrowBack />}
+                onClick={handleCancel}
+                sx={{ minWidth: 120 }}
+              >
+                ביטול
+              </Button>
+            </Box>
           </Box>
 
           <Box component="form" onSubmit={handleSubmit(onSubmit)}>
