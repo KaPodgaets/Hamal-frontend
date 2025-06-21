@@ -353,10 +353,14 @@ const CitizenFormPage = () => {
                 {watch("isAddressWrong") && (
                   <>
                     <TextField
-                      {...register("newStreetName")}
+                      {...register("newStreetName", {
+                        required: "שדה חובה",
+                      })}
                       label="רחוב חדש"
                       fullWidth
                       disabled={otherControlsDisabled}
+                      error={!!errors.newStreetName}
+                      helperText={errors.newStreetName?.message}
                     />
                     <Box
                       sx={{
@@ -366,16 +370,24 @@ const CitizenFormPage = () => {
                       }}
                     >
                       <TextField
-                        {...register("newBuildingNumber")}
+                        {...register("newBuildingNumber", {
+                          required: "שדה חובה",
+                        })}
                         label="מספר בית חדש"
                         fullWidth
                         disabled={otherControlsDisabled}
+                        error={!!errors.newBuildingNumber}
+                        helperText={errors.newBuildingNumber?.message}
                       />
                       <TextField
-                        {...register("newFlatNumber")}
+                        {...register("newFlatNumber", {
+                          required: "שדה חובה",
+                        })}
                         label="דירה חדשה"
                         fullWidth
                         disabled={otherControlsDisabled}
+                        error={!!errors.newFlatNumber}
+                        helperText={errors.newFlatNumber?.message}
                       />
                     </Box>
                   </>
