@@ -170,7 +170,10 @@ const CitizenFormPage = () => {
   };
 
   const handleCancel = () => {
-    navigate("/operator");
+    // Simple alert to confirm button click
+    alert("Cancel button clicked! Attempting navigation...");
+
+    window.location.href = "/operator";
   };
 
   const handleOpenMokedLink = () => {
