@@ -52,6 +52,11 @@ interface CitizenFormData {
   hasMiklatPrati: boolean;
   hasMiklatZiburi: boolean;
   hasMobilityRestriction: boolean;
+  isDead: boolean;
+  hasTemporaryAddress: boolean;
+  temporaryStreetName: string | null;
+  temporaryBuildingNumber: string | null;
+  temporaryFlat: string | null;
 }
 
 const CitizenFormPage = () => {
@@ -70,6 +75,8 @@ const CitizenFormPage = () => {
   } = useForm<CitizenFormData>({
     mode: "onChange", // Enable real-time validation
   });
+
+  const hasTemporaryAddress = watch("hasTemporaryAddress");
 
   const NAHARIYA_INFO_URL = "https://www.nahariya.muni.il/237";
 
@@ -103,7 +110,8 @@ const CitizenFormPage = () => {
     dispatch(clearError());
 
     // Ensure all required fields are present and properly formatted
-    const formattedData: CitizenFormData = {
+    const formattedData = {
+      ...data,
       streetName: data.streetName || "",
       buildingNumber: data.buildingNumber || "",
       flatNumber: data.flatNumber || "",
@@ -123,6 +131,15 @@ const CitizenFormPage = () => {
       hasMiklatPrati: data.hasMiklatPrati || false,
       hasMiklatZiburi: data.hasMiklatZiburi || false,
       hasMobilityRestriction: data.hasMobilityRestriction || false,
+      isDead: data.isDead || false,
+      hasTemporaryAddress: data.hasTemporaryAddress || false,
+      temporaryStreetName: data.hasTemporaryAddress
+        ? data.temporaryStreetName
+        : null,
+      temporaryBuildingNumber: data.hasTemporaryAddress
+        ? data.temporaryBuildingNumber
+        : null,
+      temporaryFlat: data.hasTemporaryAddress ? data.temporaryFlat : null,
     };
 
     console.log("Formatted data for API:", formattedData);
@@ -149,35 +166,7 @@ const CitizenFormPage = () => {
   };
 
   const handleCancel = () => {
-    console.log("=== CANCEL BUTTON DEBUG ===");
-    console.log("Cancel button clicked");
-    console.log("navigate function:", typeof navigate);
-    console.log("Current location:", window.location.href);
-
-    // Simple alert to confirm button click
-    alert("Cancel button clicked! Attempting navigation...");
-
-    try {
-      console.log("Attempting React Router navigation...");
-      // Try React Router navigation first
-      navigate("/operator", { replace: true });
-      console.log("React Router navigation called successfully");
-    } catch (error) {
-      console.error("React Router navigation failed:", error);
-      console.log("Falling back to window.location...");
-      // Fallback to window.location
-      window.location.href = "/operator";
-      console.log("window.location.href set to /operator");
-    }
-
-    // Additional test - try immediate navigation
-    setTimeout(() => {
-      console.log("Testing navigation after 1 second...");
-      if (window.location.pathname !== "/operator") {
-        console.log("Navigation didn't work, forcing with window.location");
-        window.location.href = "/operator";
-      }
-    }, 1000);
+    navigate("/operator");
   };
 
   const handleOpenMokedLink = () => {
@@ -244,444 +233,315 @@ const CitizenFormPage = () => {
           </Box>
 
           <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-            {/* Phone Numbers - Moved to top */}
+            {/* Phone Numbers */}
             <Paper sx={{ p: 3, mb: 3 }}>
               <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
                 <Phone sx={{ mr: 1, color: "primary.main" }} />
-                <Typography variant="h6" component="h2">
-                  מספרי טלפון
-                </Typography>
+                <Typography variant="h6">פרטי התקשרות</Typography>
               </Box>
-
-              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
-                <Box sx={{ flex: "1 1 300px", minWidth: 0 }}>
-                  <TextField
-                    {...register("phone1")}
-                    fullWidth
-                    label="מספר 1"
-                    type="tel"
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                    sx={{
-                      "& .MuiInputBase-input.Mui-readOnly": {
-                        backgroundColor: "grey.100",
-                      },
-                    }}
-                  />
-                </Box>
-
-                <Box sx={{ flex: "1 1 300px", minWidth: 0 }}>
-                  <TextField
-                    {...register("phone2")}
-                    fullWidth
-                    label="מספר 2"
-                    type="tel"
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                    sx={{
-                      "& .MuiInputBase-input.Mui-readOnly": {
-                        backgroundColor: "grey.100",
-                      },
-                    }}
-                  />
-                </Box>
-
-                <Box sx={{ flex: "1 1 300px", minWidth: 0 }}>
-                  <TextField
-                    {...register("phone3")}
-                    fullWidth
-                    label="מספר 3"
-                    type="tel"
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                    sx={{
-                      "& .MuiInputBase-input.Mui-readOnly": {
-                        backgroundColor: "grey.100",
-                      },
-                    }}
-                  />
-                </Box>
+              <Box
+                sx={{
+                  display: "grid",
+                  gridTemplateColumns: {
+                    xs: "1fr",
+                    sm: "repeat(3, 1fr)",
+                  },
+                  gap: 2,
+                }}
+              >
+                <TextField {...register("phone1")} label="טלפון 1" fullWidth />
+                <TextField {...register("phone2")} label="טלפון 2" fullWidth />
+                <TextField {...register("phone3")} label="טלפון 3" fullWidth />
               </Box>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    {...register("isAnsweredTheCall")}
+                    defaultChecked={currentCitizen.isAnsweredTheCall}
+                  />
+                }
+                label="ענה/לא ענה לשיחה"
+                sx={{ mt: 2 }}
+              />
             </Paper>
 
-            {/* Personal Information */}
-            <Paper sx={{ p: 3, mb: 3 }}>
-              <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
-                <Person sx={{ mr: 1, color: "primary.main" }} />
-                <Typography variant="h6" component="h2">
-                  פרטים אישיים
-                </Typography>
-              </Box>
-
-              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
-                <Box sx={{ flex: "1 1 300px", minWidth: 0 }}>
-                  <TextField
-                    {...register("firstName", {
-                      required: "First name is required",
-                    })}
-                    fullWidth
-                    label="שם פרטי"
-                    required
-                    error={!!errors.firstName}
-                    helperText={errors.firstName?.message}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                    sx={{
-                      "& .MuiInputBase-input.Mui-readOnly": {
-                        backgroundColor: "grey.100",
-                      },
-                    }}
-                  />
-                </Box>
-
-                <Box sx={{ flex: "1 1 300px", minWidth: 0 }}>
-                  <TextField
-                    {...register("lastName", {
-                      required: "Last name is required",
-                    })}
-                    fullWidth
-                    label="שם משפחה"
-                    required
-                    error={!!errors.lastName}
-                    helperText={errors.lastName?.message}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                    sx={{
-                      "& .MuiInputBase-input.Mui-readOnly": {
-                        backgroundColor: "grey.100",
-                      },
-                    }}
-                  />
-                </Box>
-
-                <Box sx={{ flex: "1 1 300px", minWidth: 0 }}>
-                  <TextField
-                    {...register("familyNumber", {
-                      required: "Family number is required",
-                      valueAsNumber: true,
-                      min: {
-                        value: 1,
-                        message: "Family number must be at least 1",
-                      },
-                    })}
-                    fullWidth
-                    label="מספר מערכת"
-                    type="number"
-                    required
-                    error={!!errors.familyNumber}
-                    helperText={errors.familyNumber?.message}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                    sx={{
-                      "& .MuiInputBase-input.Mui-readOnly": {
-                        backgroundColor: "grey.100",
-                      },
-                    }}
-                  />
-                </Box>
-
-                <Box
-                  sx={{
-                    flex: "1 1 300px",
-                    minWidth: 0,
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        {...register("isAnsweredTheCall")}
-                        color="primary"
-                      />
-                    }
-                    label="האם התושב ענה"
-                  />
-                </Box>
-
-                <Box
-                  sx={{
-                    flex: "1 1 300px",
-                    minWidth: 0,
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <FormControlLabel
-                    control={
-                      <Checkbox {...register("isLonely")} color="primary" />
-                    }
-                    label="האם תושב ללא עורף משפחתי"
-                  />
-                </Box>
-
-                <Box
-                  sx={{
-                    flex: "1 1 300px",
-                    minWidth: 0,
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <FormControlLabel
-                    control={
-                      <Checkbox {...register("hasMamad")} color="primary" />
-                    }
-                    label="האם יש ממד"
-                  />
-                </Box>
-
-                <Box
-                  sx={{
-                    flex: "1 1 300px",
-                    minWidth: 0,
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        {...register("hasMiklatPrati")}
-                        color="primary"
-                      />
-                    }
-                    label="האם יש מקלט בבניין"
-                  />
-                </Box>
-
-                <Box
-                  sx={{
-                    flex: "1 1 300px",
-                    minWidth: 0,
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        {...register("hasMiklatZiburi")}
-                        color="primary"
-                      />
-                    }
-                    label="האם יש מקלט ציבורי"
-                  />
-                </Box>
-
-                <Box
-                  sx={{
-                    flex: "1 1 300px",
-                    minWidth: 0,
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        {...register("hasMobilityRestriction")}
-                        color="primary"
-                      />
-                    }
-                    label="האם יש מגבלת ניידות"
-                  />
-                </Box>
-              </Box>
-            </Paper>
-
-            {/* Current Address */}
+            {/* Address Info */}
             <Paper sx={{ p: 3, mb: 3 }}>
               <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
                 <Home sx={{ mr: 1, color: "primary.main" }} />
-                <Typography variant="h6" component="h2">
-                  כתובת
-                </Typography>
+                <Typography variant="h6">כתובת</Typography>
               </Box>
-
-              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
-                <Box sx={{ flex: "1 1 300px", minWidth: 0 }}>
-                  <TextField
-                    {...register("streetName", {
-                      required: "Street name is required",
-                    })}
-                    fullWidth
-                    label="שם רחוב"
-                    required
-                    error={!!errors.streetName}
-                    helperText={errors.streetName?.message}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                    sx={{
-                      "& .MuiInputBase-input.Mui-readOnly": {
-                        backgroundColor: "grey.100",
-                      },
-                    }}
-                  />
-                </Box>
-
-                <Box sx={{ flex: "1 1 300px", minWidth: 0 }}>
-                  <TextField
-                    {...register("buildingNumber", {
-                      required: "Building number is required",
-                    })}
-                    fullWidth
-                    label="מס' בית"
-                    required
-                    error={!!errors.buildingNumber}
-                    helperText={errors.buildingNumber?.message}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                    sx={{
-                      "& .MuiInputBase-input.Mui-readOnly": {
-                        backgroundColor: "grey.100",
-                      },
-                    }}
-                  />
-                </Box>
-
-                <Box sx={{ flex: "1 1 300px", minWidth: 0 }}>
-                  <TextField
-                    {...register("flatNumber", {
-                      required: "Flat number is required",
-                    })}
-                    fullWidth
-                    label="מס' דירה"
-                    required
-                    error={!!errors.flatNumber}
-                    helperText={errors.flatNumber?.message}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                    sx={{
-                      "& .MuiInputBase-input.Mui-readOnly": {
-                        backgroundColor: "grey.100",
-                      },
-                    }}
-                  />
-                </Box>
-
+              <Box sx={{ display: "grid", gridTemplateColumns: "1fr", gap: 2 }}>
+                <TextField
+                  {...register("streetName")}
+                  label="רחוב"
+                  fullWidth
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                  variant="filled"
+                />
                 <Box
                   sx={{
-                    flex: "1 1 300px",
-                    minWidth: 0,
-                    display: "flex",
-                    alignItems: "center",
+                    display: "grid",
+                    gridTemplateColumns: "repeat(2, 1fr)",
+                    gap: 2,
                   }}
                 >
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        {...register("isAddressWrong")}
-                        color="primary"
+                  <TextField
+                    {...register("buildingNumber")}
+                    label="מספר בית"
+                    fullWidth
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                    variant="filled"
+                  />
+                  <TextField
+                    {...register("flatNumber")}
+                    label="דירה"
+                    fullWidth
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                    variant="filled"
+                  />
+                </Box>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      {...register("isAddressWrong")}
+                      defaultChecked={currentCitizen.isAddressWrong}
+                    />
+                  }
+                  label="כתובת שגויה"
+                />
+                {watch("isAddressWrong") && (
+                  <>
+                    <TextField
+                      {...register("newStreetName")}
+                      label="רחוב חדש"
+                      fullWidth
+                    />
+                    <Box
+                      sx={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(2, 1fr)",
+                        gap: 2,
+                      }}
+                    >
+                      <TextField
+                        {...register("newBuildingNumber")}
+                        label="מספר בית חדש"
+                        fullWidth
                       />
-                    }
-                    label="אם הכתובת אינה נכונה - יש ללחוץ על התיבת הסימון"
-                  />
-                </Box>
+                      <TextField
+                        {...register("newFlatNumber")}
+                        label="דירה חדשה"
+                        fullWidth
+                      />
+                    </Box>
+                  </>
+                )}
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      {...register("hasTemporaryAddress")}
+                      defaultChecked={currentCitizen.hasTemporaryAddress}
+                    />
+                  }
+                  label="כתובת זמנית"
+                />
+                {hasTemporaryAddress && (
+                  <>
+                    <TextField
+                      {...register("temporaryStreetName", {
+                        required: "שדה חובה",
+                      })}
+                      label="רחוב זמני"
+                      fullWidth
+                      error={!!errors.temporaryStreetName}
+                      helperText={errors.temporaryStreetName?.message}
+                    />
+                    <Box
+                      sx={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(2, 1fr)",
+                        gap: 2,
+                      }}
+                    >
+                      <TextField
+                        {...register("temporaryBuildingNumber", {
+                          required: "שדה חובה",
+                        })}
+                        label="מספר בית זמני"
+                        fullWidth
+                        error={!!errors.temporaryBuildingNumber}
+                        helperText={errors.temporaryBuildingNumber?.message}
+                      />
+                      <TextField
+                        {...register("temporaryFlat", {
+                          required: "שדה חובה",
+                        })}
+                        label="דירה זמנית"
+                        fullWidth
+                        error={!!errors.temporaryFlat}
+                        helperText={errors.temporaryFlat?.message}
+                      />
+                    </Box>
+                  </>
+                )}
               </Box>
             </Paper>
 
-            {/* New Address (if address is wrong) */}
+            {/* Personal Info */}
             <Paper sx={{ p: 3, mb: 3 }}>
-              <Typography variant="h6" component="h2" sx={{ mb: 3 }}>
-                עדכון כתובת
-              </Typography>
-
-              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
-                <Box sx={{ flex: "1 1 300px", minWidth: 0 }}>
-                  <TextField
-                    {...register("newStreetName")}
-                    fullWidth
-                    label="שם רחוב"
-                    disabled={!watch("isAddressWrong")}
-                    sx={{
-                      "& .MuiInputBase-root.Mui-disabled": {
-                        backgroundColor: "grey.100",
-                      },
-                    }}
-                  />
-                </Box>
-
-                <Box sx={{ flex: "1 1 300px", minWidth: 0 }}>
-                  <TextField
-                    {...register("newBuildingNumber")}
-                    fullWidth
-                    label="מס' בית"
-                    disabled={!watch("isAddressWrong")}
-                    sx={{
-                      "& .MuiInputBase-root.Mui-disabled": {
-                        backgroundColor: "grey.100",
-                      },
-                    }}
-                  />
-                </Box>
-
-                <Box sx={{ flex: "1 1 300px", minWidth: 0 }}>
-                  <TextField
-                    {...register("newFlatNumber")}
-                    fullWidth
-                    label="מס' דירה"
-                    disabled={!watch("isAddressWrong")}
-                    sx={{
-                      "& .MuiInputBase-root.Mui-disabled": {
-                        backgroundColor: "grey.100",
-                      },
-                    }}
-                  />
-                </Box>
+              <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
+                <Person sx={{ mr: 1, color: "primary.main" }} />
+                <Typography variant="h6">פרטים אישיים</Typography>
+              </Box>
+              <Box
+                sx={{
+                  display: "grid",
+                  gridTemplateColumns: {
+                    xs: "1fr",
+                    sm: "repeat(3, 1fr)",
+                  },
+                  gap: 2,
+                }}
+              >
+                <TextField
+                  {...register("firstName")}
+                  label="שם פרטי"
+                  fullWidth
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                  variant="filled"
+                />
+                <TextField
+                  {...register("lastName")}
+                  label="שם משפחה"
+                  fullWidth
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                  variant="filled"
+                />
+                <TextField
+                  {...register("familyNumber", {
+                    valueAsNumber: true,
+                  })}
+                  label="מספר נפשות"
+                  type="number"
+                  fullWidth
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                  variant="filled"
+                />
               </Box>
             </Paper>
 
-            {error && (
-              <Alert severity="error" sx={{ mb: 3 }}>
-                {error}
-              </Alert>
-            )}
+            {/* General Info & Status */}
+            <Paper sx={{ p: 3, mb: 3 }}>
+              <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+                <Person sx={{ mr: 1, color: "primary.main" }} />
+                <Typography variant="h6">מידע כללי</Typography>
+              </Box>
+              <Box
+                sx={{
+                  display: "grid",
+                  gridTemplateColumns: {
+                    xs: "1fr",
+                    sm: "repeat(2, 1fr)",
+                    md: "repeat(3, 1fr)",
+                  },
+                  gap: 1,
+                }}
+              >
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      {...register("isLonely")}
+                      defaultChecked={currentCitizen.isLonely}
+                    />
+                  }
+                  label="אזרח בודד"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      {...register("hasMamad")}
+                      defaultChecked={currentCitizen.hasMamad}
+                    />
+                  }
+                  label='יש ממ"ד'
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      {...register("hasMiklatPrati")}
+                      defaultChecked={currentCitizen.hasMiklatPrati}
+                    />
+                  }
+                  label="יש מקלט פרטי"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      {...register("hasMiklatZiburi")}
+                      defaultChecked={currentCitizen.hasMiklatZiburi}
+                    />
+                  }
+                  label="יש מקלט ציבורי"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      {...register("hasMobilityRestriction")}
+                      defaultChecked={currentCitizen.hasMobilityRestriction}
+                    />
+                  }
+                  label="מוגבלות תנועה"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      {...register("isDead")}
+                      defaultChecked={currentCitizen.isDead}
+                    />
+                  }
+                  label="האם בן אדם נפטר"
+                />
+              </Box>
+            </Paper>
 
             {/* Action Buttons */}
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "flex-end",
-                gap: 2,
-                pt: 3,
-              }}
-            >
+            <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 4 }}>
               <Button
                 type="submit"
                 variant="contained"
+                startIcon={<Save />}
                 disabled={loading || !isValid}
-                startIcon={loading ? <CircularProgress size={20} /> : <Save />}
-                sx={{ minWidth: 140 }}
+                sx={{ minWidth: 120, mr: 2 }}
               >
-                {loading ? "Saving..." : "שמירה"}
+                {loading ? <CircularProgress size={24} /> : "שמור שינויים"}
+              </Button>
+              <Button
+                variant="outlined"
+                startIcon={<Cancel />}
+                onClick={handleCancel}
+                sx={{ minWidth: 120 }}
+              >
+                ביטול
               </Button>
             </Box>
-          </Box>
-
-          {/* Cancel button outside form to prevent form interference */}
-          <Box sx={{ mt: 3, display: "flex", justifyContent: "flex-end" }}>
-            <Button
-              variant="outlined"
-              startIcon={<Cancel />}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                handleCancel();
-              }}
-              sx={{ minWidth: 120 }}
-            >
-              ביטול
-            </Button>
+            {error && (
+              <Alert severity="error" sx={{ mt: 3 }}>
+                {error}
+              </Alert>
+            )}
           </Box>
         </CardContent>
       </Card>
