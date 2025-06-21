@@ -77,6 +77,10 @@ const CitizenFormPage = () => {
   });
 
   const hasTemporaryAddress = watch("hasTemporaryAddress");
+  const isAnswered = watch("isAnsweredTheCall");
+  const isDead = watch("isDead");
+
+  const otherControlsDisabled = !isAnswered || isDead;
 
   const NAHARIYA_INFO_URL = "https://www.nahariya.muni.il/237";
 
@@ -249,20 +253,49 @@ const CitizenFormPage = () => {
                   gap: 2,
                 }}
               >
-                <TextField {...register("phone1")} label="טלפון 1" fullWidth />
-                <TextField {...register("phone2")} label="טלפון 2" fullWidth />
-                <TextField {...register("phone3")} label="טלפון 3" fullWidth />
+                <TextField
+                  {...register("phone1")}
+                  label="טלפון 1"
+                  fullWidth
+                  InputProps={{ readOnly: true }}
+                  variant="filled"
+                />
+                <TextField
+                  {...register("phone2")}
+                  label="טלפון 2"
+                  fullWidth
+                  InputProps={{ readOnly: true }}
+                  variant="filled"
+                />
+                <TextField
+                  {...register("phone3")}
+                  label="טלפון 3"
+                  fullWidth
+                  InputProps={{ readOnly: true }}
+                  variant="filled"
+                />
               </Box>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    {...register("isAnsweredTheCall")}
-                    defaultChecked={currentCitizen.isAnsweredTheCall}
-                  />
-                }
-                label="ענה/לא ענה לשיחה"
-                sx={{ mt: 2 }}
-              />
+              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2, mt: 2 }}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      {...register("isAnsweredTheCall")}
+                      defaultChecked={currentCitizen.isAnsweredTheCall}
+                    />
+                  }
+                  label="ענה/לא ענה לשיחה"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      {...register("isDead")}
+                      defaultChecked={currentCitizen.isDead}
+                      disabled={!isAnswered}
+                    />
+                  }
+                  label="האם בן אדם נפטר"
+                />
+              </Box>
             </Paper>
 
             {/* Address Info */}
@@ -312,6 +345,7 @@ const CitizenFormPage = () => {
                     <Checkbox
                       {...register("isAddressWrong")}
                       defaultChecked={currentCitizen.isAddressWrong}
+                      disabled={otherControlsDisabled}
                     />
                   }
                   label="כתובת שגויה"
@@ -322,6 +356,7 @@ const CitizenFormPage = () => {
                       {...register("newStreetName")}
                       label="רחוב חדש"
                       fullWidth
+                      disabled={otherControlsDisabled}
                     />
                     <Box
                       sx={{
@@ -334,11 +369,13 @@ const CitizenFormPage = () => {
                         {...register("newBuildingNumber")}
                         label="מספר בית חדש"
                         fullWidth
+                        disabled={otherControlsDisabled}
                       />
                       <TextField
                         {...register("newFlatNumber")}
                         label="דירה חדשה"
                         fullWidth
+                        disabled={otherControlsDisabled}
                       />
                     </Box>
                   </>
@@ -348,6 +385,7 @@ const CitizenFormPage = () => {
                     <Checkbox
                       {...register("hasTemporaryAddress")}
                       defaultChecked={currentCitizen.hasTemporaryAddress}
+                      disabled={otherControlsDisabled}
                     />
                   }
                   label="כתובת זמנית"
@@ -362,6 +400,7 @@ const CitizenFormPage = () => {
                       fullWidth
                       error={!!errors.temporaryStreetName}
                       helperText={errors.temporaryStreetName?.message}
+                      disabled={otherControlsDisabled}
                     />
                     <Box
                       sx={{
@@ -378,6 +417,7 @@ const CitizenFormPage = () => {
                         fullWidth
                         error={!!errors.temporaryBuildingNumber}
                         helperText={errors.temporaryBuildingNumber?.message}
+                        disabled={otherControlsDisabled}
                       />
                       <TextField
                         {...register("temporaryFlat", {
@@ -387,6 +427,7 @@ const CitizenFormPage = () => {
                         fullWidth
                         error={!!errors.temporaryFlat}
                         helperText={errors.temporaryFlat?.message}
+                        disabled={otherControlsDisabled}
                       />
                     </Box>
                   </>
@@ -465,6 +506,7 @@ const CitizenFormPage = () => {
                     <Checkbox
                       {...register("isLonely")}
                       defaultChecked={currentCitizen.isLonely}
+                      disabled={otherControlsDisabled}
                     />
                   }
                   label="אזרח בודד"
@@ -474,6 +516,7 @@ const CitizenFormPage = () => {
                     <Checkbox
                       {...register("hasMamad")}
                       defaultChecked={currentCitizen.hasMamad}
+                      disabled={otherControlsDisabled}
                     />
                   }
                   label='יש ממ"ד'
@@ -483,6 +526,7 @@ const CitizenFormPage = () => {
                     <Checkbox
                       {...register("hasMiklatPrati")}
                       defaultChecked={currentCitizen.hasMiklatPrati}
+                      disabled={otherControlsDisabled}
                     />
                   }
                   label="יש מקלט פרטי"
@@ -492,6 +536,7 @@ const CitizenFormPage = () => {
                     <Checkbox
                       {...register("hasMiklatZiburi")}
                       defaultChecked={currentCitizen.hasMiklatZiburi}
+                      disabled={otherControlsDisabled}
                     />
                   }
                   label="יש מקלט ציבורי"
@@ -501,18 +546,10 @@ const CitizenFormPage = () => {
                     <Checkbox
                       {...register("hasMobilityRestriction")}
                       defaultChecked={currentCitizen.hasMobilityRestriction}
+                      disabled={otherControlsDisabled}
                     />
                   }
                   label="מוגבלות תנועה"
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      {...register("isDead")}
-                      defaultChecked={currentCitizen.isDead}
-                    />
-                  }
-                  label="האם בן אדם נפטר"
                 />
               </Box>
             </Paper>
@@ -523,7 +560,7 @@ const CitizenFormPage = () => {
                 type="submit"
                 variant="contained"
                 startIcon={<Save />}
-                disabled={loading || !isValid}
+                disabled={loading || !isValid || !isAnswered}
                 sx={{ minWidth: 120, mr: 2 }}
               >
                 {loading ? <CircularProgress size={24} /> : "שמור שינויים"}
