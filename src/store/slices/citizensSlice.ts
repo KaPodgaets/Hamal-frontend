@@ -24,6 +24,11 @@ interface CitizenResponse {
   hasMiklatPrati: boolean;
   hasMiklatZiburi: boolean;
   hasMobilityRestriction: boolean;
+  isDead: boolean;
+  hasTemporaryAddress: boolean;
+  temporaryStreetName: string | null;
+  temporaryBuildingNumber: string | null;
+  temporaryFlat: string | null;
 }
 
 interface UpdateCitizenRequest {
@@ -46,6 +51,11 @@ interface UpdateCitizenRequest {
   hasMiklatPrati: boolean;
   hasMiklatZiburi: boolean;
   hasMobilityRestriction: boolean;
+  isDead: boolean;
+  hasTemporaryAddress: boolean;
+  temporaryStreetName: string | null;
+  temporaryBuildingNumber: string | null;
+  temporaryFlat: string | null;
 }
 
 interface CitizensState {
