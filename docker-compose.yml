@@ -1,0 +1,6 @@
+services:
+  frontend:
+    build: .
+    ports:
+      - "5174:80"
+    container_name: hamal-frontend
