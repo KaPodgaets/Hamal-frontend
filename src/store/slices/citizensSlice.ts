@@ -25,7 +25,9 @@ interface CitizenResponse {
   hasMiklatZiburi: boolean;
   hasMobilityRestriction: boolean;
   isDead: boolean;
+  isLeftTheCity: boolean;
   hasTemporaryAddress: boolean;
+  isTemporaryAbroad: boolean;
   temporaryStreetName: string | null;
   temporaryBuildingNumber: string | null;
   temporaryFlat: string | null;
@@ -52,7 +54,9 @@ interface UpdateCitizenRequest {
   hasMiklatZiburi: boolean;
   hasMobilityRestriction: boolean;
   isDead: boolean;
+  isLeftTheCity: boolean;
   hasTemporaryAddress: boolean;
+  isTemporaryAbroad: boolean;
   temporaryStreetName: string | null;
   temporaryBuildingNumber: string | null;
   temporaryFlat: string | null;

@@ -53,7 +53,9 @@ interface CitizenFormData {
   hasMiklatZiburi: boolean;
   hasMobilityRestriction: boolean;
   isDead: boolean;
+  isLeftTheCity: boolean;
   hasTemporaryAddress: boolean;
+  isTemporaryAbroad: boolean;
   temporaryStreetName: string | null;
   temporaryBuildingNumber: string | null;
   temporaryFlat: string | null;
@@ -79,8 +81,9 @@ const CitizenFormPage = () => {
   const hasTemporaryAddress = watch("hasTemporaryAddress");
   const isAnswered = watch("isAnsweredTheCall");
   const isDead = watch("isDead");
+  const isLeftTheCity = watch("isLeftTheCity");
 
-  const otherControlsDisabled = !isAnswered || isDead;
+  const otherControlsDisabled = !isAnswered || isDead || isLeftTheCity;
 
   const NAHARIYA_INFO_URL = "https://www.nahariya.muni.il/237";
 
@@ -136,7 +139,9 @@ const CitizenFormPage = () => {
       hasMiklatZiburi: data.hasMiklatZiburi || false,
       hasMobilityRestriction: data.hasMobilityRestriction || false,
       isDead: data.isDead || false,
+      isLeftTheCity: data.isLeftTheCity || false,
       hasTemporaryAddress: data.hasTemporaryAddress || false,
+      isTemporaryAbroad: data.isTemporaryAbroad || false,
       temporaryStreetName: data.hasTemporaryAddress
         ? data.temporaryStreetName
         : null,
@@ -286,7 +291,7 @@ const CitizenFormPage = () => {
                       defaultChecked={currentCitizen.isAnsweredTheCall}
                     />
                   }
-                  label="ענה/לא ענה לשיחה"
+                  label="בן אדם ענה לשיחה"
                 />
                 <FormControlLabel
                   control={
@@ -297,6 +302,16 @@ const CitizenFormPage = () => {
                     />
                   }
                   label="האם בן אדם נפטר"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      {...register("isLeftTheCity")}
+                      defaultChecked={currentCitizen.isLeftTheCity}
+                      disabled={!isAnswered}
+                    />
+                  }
+                  label="האם בן אדם עזב את העיר באופן קבוע"
                 />
               </Box>
             </Paper>
@@ -404,6 +419,16 @@ const CitizenFormPage = () => {
                     />
                   }
                   label="כתובת זמנית"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      {...register("isTemporaryAbroad")}
+                      defaultChecked={currentCitizen.isTemporaryAbroad}
+                      disabled={otherControlsDisabled}
+                    />
+                  }
+                  label="האם בן אדם בחול זמני"
                 />
                 {hasTemporaryAddress && (
                   <>
