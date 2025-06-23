@@ -5,11 +5,11 @@ import api from "../../services/api";
 // Types based on new authoritative OpenAPI documentation
 interface CitizenResponse {
   id: number;
-  streetName: string;
-  buildingNumber: string;
-  flatNumber: string;
-  firstName: string;
-  lastName: string;
+  streetName: string | null;
+  buildingNumber: string | null;
+  flatNumber: string | null;
+  firstName: string | null;
+  lastName: string | null;
   familyNumber: number;
   isLonely: boolean;
   isAddressWrong: boolean;
@@ -31,6 +31,10 @@ interface CitizenResponse {
   temporaryStreetName: string | null;
   temporaryBuildingNumber: string | null;
   temporaryFlat: string | null;
+  appearanceCount: number;
+  FirstAppearanceTimestamp: string | null;
+  SecondAppearanceTimestamp: string | null;
+  ThirdAppearanceTimestamp: string | null;
 }
 
 interface UpdateCitizenRequest {
