@@ -1,13 +1,13 @@
 ---
 id: ARCH-service-hamal-api
-title: "Service: Hamal Backend API"
+title: "Service. Hamal Backend API"
 type: service
 layer: infrastructure
 owner: @backend-team
 version: v1
 status: current
 created: 2025-06-17
-updated: 2025-06-17
+updated: 2025-06-24
 tags: [api, backend, rest]
 depends_on: []
 referenced_by: []
@@ -15,31 +15,38 @@ referenced_by: []
 
 ## Context
 
-This component represents the external Hamal Backend API, which provides all necessary data and business logic for the call center application. The frontend application depends on this service for its core functionality.
+This document describes the Hamal Backend API service architecture. The API provides RESTful endpoints for citizen data management, user authentication, and administrative operations.
 
 ## Structure
 
-This is a RESTful API service. The detailed specification of its endpoints, request/response models, and authentication mechanism is provided in the OpenAPI document.
+The API is built with ASP.NET Core and provides the following key endpoints:
 
-- **API Specification:** `architecture/openapi-doc.md`
-
-Key functional areas provided by the API:
-
-- `Auth`: User authentication.
-- `Users`: User management (for admins).
-- `Citizens`: Core workflow for retrieving and updating citizen data.
-- `Admin`: Bulk data operations (for admins).
+- **Authentication**: `POST /api/Auth/login` for user authentication
+- **Citizens**: `GET /api/Citizens/next` and `PUT /api/Citizens/{id}` for citizen workflow
+- **Admin**: `GET`, `POST`, `DELETE /api/admin/citizens` for bulk operations
+- **Users**: `GET`, `POST`, `PUT`, `DELETE /api/admin/users` for user management
 
 ## Behavior
 
-The API is responsible for authenticating users, providing role-based access, managing citizen records, and allowing administrative data management. The frontend is expected to interact with this API using HTTP requests, authenticating with a Bearer token.
+The API implements JWT-based authentication and role-based authorization. It provides endpoints for:
+
+- Operator workflow (get next citizen, update citizen data)
+- Admin operations (user management, citizen data bulk operations)
+- Authentication and authorization
 
 ## Evolution
 
+### Current
+
+- Complete REST API with authentication and authorization
+- Citizen data management endpoints
+- Admin user and data management endpoints
+- JWT-based security
+
 ### Planned
 
-- The frontend application will be fully integrated with this API to implement all user workflows.
+- A new endpoint `POST /citizen/106-case` will be added to allow operators to log that a case has been escalated to the municipal call center.
 
 ### Historical
 
-- v1: Initial API specification provided.
+- v1: Initial API implementation with core endpoints
