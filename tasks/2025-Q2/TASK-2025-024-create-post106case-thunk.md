@@ -1,7 +1,7 @@
 ---
 id: TASK-2025-024
 title: "Create post106CaseThunk in citizensSlice"
-status: backlog
+status: completed
 priority: high
 type: feature
 estimate: 3h
@@ -12,6 +12,7 @@ parents: [TASK-2025-020]
 arch_refs: [ARCH-app-case-escalation-workflow, ARCH-service-hamal-api]
 audit_log:
   - {date: 2025-06-24, user: "@AI-DocArchitect", action: "created with status backlog"}
+  - {date: 2025-06-24, user: "@AI-Assistant", action: "completed - Implemented post106CaseThunk and updated extraReducers"}
 ---
 
 ## Description
@@ -27,3 +28,7 @@ Create an async thunk in `src/store/slices/citizensSlice.ts` to encapsulate the 
   - On pending, `loading` is set to true.
   - On fulfilled, `loading` is set to false and `currentCitizen` is cleared.
   - On rejected, `loading` is set to false and the `error` state field is populated.
+
+## Definition of Done
+
+- post106CaseThunk is implemented and integrated into citizensSlice.

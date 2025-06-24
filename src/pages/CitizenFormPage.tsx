@@ -90,7 +90,14 @@ const CitizenFormPage = () => {
   // Populate form when citizen data is available
   useEffect(() => {
     if (currentCitizen) {
-      reset(currentCitizen);
+      reset({
+        ...currentCitizen,
+        streetName: currentCitizen.streetName || "",
+        buildingNumber: currentCitizen.buildingNumber || "",
+        flatNumber: currentCitizen.flatNumber || "",
+        firstName: currentCitizen.firstName || "",
+        lastName: currentCitizen.lastName || "",
+      });
     }
   }, [currentCitizen, reset]);
 
@@ -175,10 +182,14 @@ const CitizenFormPage = () => {
   };
 
   const handleCancel = () => {
-    // Simple alert to confirm button click
-    alert("Cancel button clicked! Attempting navigation...");
-
-    window.location.href = "/operator";
+    // Check if citizen has appeared 3 or more times
+    if (currentCitizen && currentCitizen.appearanceCount >= 3) {
+      // Navigate to case 106 data page for escalation
+      navigate("/case-106-data");
+    } else {
+      // Navigate back to operator page as before
+      navigate("/operator");
+    }
   };
 
   const handleOpenMokedLink = () => {

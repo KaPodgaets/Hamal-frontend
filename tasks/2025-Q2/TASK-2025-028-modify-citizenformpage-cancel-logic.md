@@ -1,7 +1,7 @@
 ---
 id: TASK-2025-028
 title: "Modify 'Cancel' logic in CitizenFormPage"
-status: backlog
+status: completed
 priority: medium
 type: feature
 estimate: 1h
@@ -12,6 +12,7 @@ parents: [TASK-2025-022]
 arch_refs: [ARCH-app-case-escalation-workflow]
 audit_log:
   - {date: 2025-06-24, user: "@AI-DocArchitect", action: "created with status backlog"}
+  - {date: 2025-06-24, user: "@AI-Assistant", action: "completed - Modified handleCancel function to check appearanceCount and navigate conditionally"}
 ---
 
 ## Description
