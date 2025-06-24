@@ -11,6 +11,7 @@ import {
   Paper,
   Grid,
 } from "@mui/material";
+import { OpenInNew } from "@mui/icons-material";
 import type { RootState, AppDispatch } from "../store/store";
 import {
   clearCurrentCitizen,
@@ -26,6 +27,12 @@ const Case106DataPage: React.FC = () => {
   );
   const [caseNumber, setCaseNumber] = useState("");
   const [isValidCaseNumber, setIsValidCaseNumber] = useState(false);
+
+  const NAHARIYA_INFO_URL = "https://www.nahariya.muni.il/237";
+
+  const handleOpenMokedLink = () => {
+    window.open(NAHARIYA_INFO_URL, "_blank", "noopener,noreferrer");
+  };
 
   // Redirect if no current citizen
   useEffect(() => {
@@ -62,13 +69,30 @@ const Case106DataPage: React.FC = () => {
     }
   };
 
-  const municipalityMessage = `שלום, אני מתקשר/ת לגבי אזרח/ית בשם ${
-    currentCitizen?.firstName || ""
-  } ${currentCitizen?.lastName || ""}, ת.ז. ${
-    currentCitizen?.id || ""
-  }, טלפון ${currentCitizen?.phone1 || ""}, כתובת ${
-    currentCitizen?.streetName || ""
-  } ${currentCitizen?.buildingNumber || ""}. נדרש לפתוח תיק 106.`;
+  const formatTimestamp = (timestamp: string | null | undefined) => {
+    if (!timestamp) return "";
+    // Remove seconds from timestamp (assuming format like "2024-01-01 12:34:56")
+    return timestamp.replace(/:\d{2}$/, "");
+  };
+
+  const municipalityMessage = `נכתב על ידי חמ"ל
+שם: ${currentCitizen?.firstName || ""} ${currentCitizen?.lastName || ""}
+טלפון: ${currentCitizen?.phone1 || ""}
+${currentCitizen?.phone2 ? `טלפון נוסף: ${currentCitizen.phone2}\n` : ""}${
+    currentCitizen?.phone3 ? `טלפון נוסף: ${currentCitizen.phone3}\n` : ""
+  }כתובת: ${currentCitizen?.streetName || ""} ${
+    currentCitizen?.buildingNumber || ""
+  }
+התושב לא ענה על השיחות מחמל בתאריך:
+${formatTimestamp(currentCitizen?.firstAppearanceTimestamp)}${
+    currentCitizen?.secondAppearanceTimestamp
+      ? `\n${formatTimestamp(currentCitizen.secondAppearanceTimestamp)}`
+      : ""
+  }${
+    currentCitizen?.thirdAppearanceTimestamp
+      ? `\n${formatTimestamp(currentCitizen.thirdAppearanceTimestamp)}`
+      : ""
+  }`;
 
   if (!currentCitizen) {
     return null; // Will redirect via useEffect
@@ -79,6 +103,15 @@ const Case106DataPage: React.FC = () => {
       <Typography variant="h4" component="h1" gutterBottom>
         פתיחת תיק 106
       </Typography>
+      <Button
+        variant="outlined"
+        color="secondary"
+        startIcon={<OpenInNew />}
+        onClick={handleOpenMokedLink}
+        sx={{ ml: "auto", display: "block" }}
+      >
+        לפתוח קריאה מוקד 106
+      </Button>
 
       <Paper sx={{ p: 3, mb: 3 }}>
         <Typography variant="h6" gutterBottom>
@@ -120,7 +153,12 @@ const Case106DataPage: React.FC = () => {
         <Typography variant="h6" gutterBottom>
           הודעה למוקד העירוני
         </Typography>
-        <CopyableField label="הודעה למוקד" value={municipalityMessage} />
+        <CopyableField
+          label="הודעה למוקד"
+          value={municipalityMessage}
+          multiline={true}
+          rows={6}
+        />
       </Paper>
 
       <Paper sx={{ p: 3, mb: 3 }}>

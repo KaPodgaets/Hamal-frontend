@@ -6,9 +6,16 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 interface CopyableFieldProps {
   label: string;
   value: string;
+  rows?: number;
+  multiline?: boolean;
 }
 
-const CopyableField: React.FC<CopyableFieldProps> = ({ label, value }) => {
+const CopyableField: React.FC<CopyableFieldProps> = ({
+  label,
+  value,
+  rows = 1,
+  multiline = false,
+}) => {
   const handleCopy = () => {
     navigator.clipboard.writeText(value);
   };
@@ -17,6 +24,8 @@ const CopyableField: React.FC<CopyableFieldProps> = ({ label, value }) => {
     <TextField
       label={label}
       value={value}
+      multiline={multiline}
+      rows={rows}
       InputProps={{
         readOnly: true,
         endAdornment: (

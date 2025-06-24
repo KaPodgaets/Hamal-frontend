@@ -141,7 +141,7 @@ export const post106CaseThunk = createAsyncThunk(
   "citizens/post106Case",
   async (payload: { id: number; caseNumber: string }, { rejectWithValue }) => {
     try {
-      const response = await api.post("/citizen/106-case", payload);
+      const response = await api.post("/api/Citizens/106-case", payload);
       if (response.status === 200 || response.status === 201) {
         return response.data;
       }
