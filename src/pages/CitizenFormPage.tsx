@@ -187,8 +187,9 @@ const CitizenFormPage = () => {
       // Navigate to case 106 data page for escalation
       navigate("/case-106-data");
     } else {
+      dispatch(clearCurrentCitizen());
       // Navigate back to operator page as before
-      navigate("/operator");
+      window.location.href = "/operator";
     }
   };
 
