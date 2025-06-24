@@ -10,6 +10,7 @@ import { CssBaseline, Box } from "@mui/material";
 import LoginPage from "./pages/LoginPage";
 import GetNextCitizenPage from "./pages/GetNextCitizenPage";
 import CitizenFormPage from "./pages/CitizenFormPage";
+import Case106DataPage from "./pages/Case106DataPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminDataManagementPage from "./pages/AdminDataManagementPage";
 import AdminUserManagementPage from "./pages/AdminUserManagementPage";
@@ -112,6 +113,14 @@ function App() {
               element={
                 <ProtectedRoute requiredRole={1}>
                   <CitizenFormPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/case-106-data"
+              element={
+                <ProtectedRoute requiredRole={1}>
+                  <Case106DataPage />
                 </ProtectedRoute>
               }
             />

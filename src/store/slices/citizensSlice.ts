@@ -5,11 +5,11 @@ import api from "../../services/api";
 // Types based on new authoritative OpenAPI documentation
 interface CitizenResponse {
   id: number;
-  streetName: string;
-  buildingNumber: string;
-  flatNumber: string;
-  firstName: string;
-  lastName: string;
+  streetName: string | null;
+  buildingNumber: string | null;
+  flatNumber: string | null;
+  firstName: string | null;
+  lastName: string | null;
   familyNumber: number;
   isLonely: boolean;
   isAddressWrong: boolean;
@@ -31,6 +31,10 @@ interface CitizenResponse {
   temporaryStreetName: string | null;
   temporaryBuildingNumber: string | null;
   temporaryFlat: string | null;
+  appearanceCount: number;
+  firstAppearanceTimestamp: string | null;
+  secondAppearanceTimestamp: string | null;
+  thirdAppearanceTimestamp: string | null;
 }
 
 interface UpdateCitizenRequest {
@@ -132,6 +136,27 @@ export const updateCitizenThunk = createAsyncThunk(
   }
 );
 
+// Async thunk for posting 106 case
+export const post106CaseThunk = createAsyncThunk(
+  "citizens/post106Case",
+  async (payload: { id: number; caseNumber: string }, { rejectWithValue }) => {
+    try {
+      const response = await api.post("/api/Citizens/106-case", payload);
+      if (response.status === 200 || response.status === 201) {
+        return response.data;
+      }
+      return rejectWithValue("Failed to post 106 case");
+    } catch (error: unknown) {
+      const errorMessage =
+        error && typeof error === "object" && "response" in error
+          ? (error.response as { data?: { message?: string } })?.data
+              ?.message || "Failed to post 106 case"
+          : "Failed to post 106 case";
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
 // Citizens slice
 const citizensSlice = createSlice({
   name: "citizens",
@@ -180,6 +205,20 @@ const citizensSlice = createSlice({
         state.error = null;
       })
       .addCase(updateCitizenThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      // Post 106 case
+      .addCase(post106CaseThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(post106CaseThunk.fulfilled, (state) => {
+        state.loading = false;
+        state.currentCitizen = null;
+        state.error = null;
+      })
+      .addCase(post106CaseThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

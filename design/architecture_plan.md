@@ -5,9 +5,9 @@
 This document outlines a definitive refactoring plan to align the Hamal Call Center Frontend with the latest, authoritative API schema. The primary objective is to refactor the application to use the correct data models for citizen information and to implement robust user logout functionality.
 
 - **Key Goals:**
-  1.  **Full API Schema Alignment:** Refactor the entire citizen data flow—from documentation and state management to the UI—to precisely match the provided `CitizenResponse` and `UpdateCitizenRequest` schemas.
-  2.  **Implement Correct Logout:** Ensure that "Logout" and "Sign out" buttons perform a secure, client-side logout by clearing the session from the Redux store and local storage, then redirecting to the login page.
-  3.  **Improve User Experience:** Implement the "Cancel" button on the citizen form to correctly navigate the user back to the operator's main page.
+  1. **Full API Schema Alignment:** Refactor the entire citizen data flow—from documentation and state management to the UI—to precisely match the provided `CitizenResponse` and `UpdateCitizenRequest` schemas.
+  2. **Implement Correct Logout:** Ensure that "Logout" and "Sign out" buttons perform a secure, client-side logout by clearing the session from the Redux store and local storage, then redirecting to the login page.
+  3. **Improve User Experience:** Implement the "Cancel" button on the citizen form to correctly navigate the user back to the operator's main page.
 
 ## 2. Current Situation Analysis
 
@@ -23,8 +23,8 @@ The application is misaligned with the new, authoritative API schema provided in
 
 The refactoring will follow a strict, two-phase approach to ensure data integrity and a smooth implementation process.
 
-1.  **Phase 1: Foundation and Data Layer Synchronization:** Update the core documentation and state management layer to match the new API schema. This establishes a correct foundation before any UI work begins.
-2.  **Phase 2: UI and Interaction Layer Implementation:** With the data layer aligned, refactor the `CitizenFormPage` and implement the correct behavior for all interactive elements like "Save," "Cancel," and "Logout."
+1. **Phase 1: Foundation and Data Layer Synchronization:** Update the core documentation and state management layer to match the new API schema. This establishes a correct foundation before any UI work begins.
+2. **Phase 2: UI and Interaction Layer Implementation:** With the data layer aligned, refactor the `CitizenFormPage` and implement the correct behavior for all interactive elements like "Save," "Cancel," and "Logout."
 
 ### 3.2. API Design / Interface Changes
 
