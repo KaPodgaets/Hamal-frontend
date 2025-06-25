@@ -97,6 +97,7 @@ ${formatTimestamp(currentCitizen?.firstAppearanceTimestamp)}${
   if (!currentCitizen) {
     return null; // Will redirect via useEffect
   }
+  const email = "mitnadvim20252025@gmail.com";
 
   return (
     <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
@@ -133,6 +134,9 @@ ${formatTimestamp(currentCitizen?.firstAppearanceTimestamp)}${
           </Grid>
           <Grid>
             <CopyableField label="טלפון" value={currentCitizen.phone1 || ""} />
+          </Grid>
+          <Grid>
+            <CopyableField label="email" value={email || ""} />
           </Grid>
           <Grid>
             <CopyableField
