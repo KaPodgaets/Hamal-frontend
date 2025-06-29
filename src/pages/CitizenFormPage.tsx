@@ -31,6 +31,7 @@ import {
   clearCurrentCitizen,
 } from "../store/slices/citizensSlice";
 import type { AppDispatch, RootState } from "../store/store";
+import { NAHARIYA_INFO_URL } from "../constants/urls";
 
 interface CitizenFormData {
   streetName: string;
@@ -84,8 +85,6 @@ const CitizenFormPage = () => {
   const isLeftTheCity = watch("isLeftTheCity");
 
   const otherControlsDisabled = !isAnswered || isDead || isLeftTheCity;
-
-  const NAHARIYA_INFO_URL = "https://www.nahariya.muni.il/237";
 
   // Populate form when citizen data is available
   useEffect(() => {

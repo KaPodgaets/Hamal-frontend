@@ -18,6 +18,7 @@ import {
   post106CaseThunk,
 } from "../store/slices/citizensSlice";
 import CopyableField from "../components/CopyableField";
+import { NAHARIYA_INFO_URL } from "../constants/urls";
 
 const Case106DataPage: React.FC = () => {
   const navigate = useNavigate();
@@ -27,8 +28,6 @@ const Case106DataPage: React.FC = () => {
   );
   const [caseNumber, setCaseNumber] = useState("");
   const [isValidCaseNumber, setIsValidCaseNumber] = useState(false);
-
-  const NAHARIYA_INFO_URL = "https://www.nahariya.muni.il/237";
 
   const handleOpenMokedLink = () => {
     window.open(NAHARIYA_INFO_URL, "_blank", "noopener,noreferrer");
